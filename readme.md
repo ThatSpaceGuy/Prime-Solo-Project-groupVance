@@ -1,17 +1,5 @@
-Basic Set-up
+Total Mercy
 ============
-
-1) [create git repository]
-2) git init
-3) git remote add origin [repository address]
-4) npm init --yes
-5) npm install
-6) heroku create ['heroku login' first, if necessary]
-7) git add . & git commit -m "Initial Commit"
-8) git push origin master
-9) git push heroku master
-10) heroku ps:scale web=1
-11) heroku open [To test]
 
 
 Versioning Plan

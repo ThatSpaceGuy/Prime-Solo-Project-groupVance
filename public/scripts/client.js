@@ -1,7 +1,7 @@
 console.log('scripts.js sourced!');
 /// == Global Variable Declarations == ///
 var verbose = true; // if (verbose) {console.log('');}
-var myApp = angular.module( 'myApp', [] );
+var myApp = angular.module( 'myApp', ['ngRoute'] );
 /// == Function Declarations == ///
 
 
@@ -25,3 +25,23 @@ myApp.controller( 'testController', [ '$scope', '$http', function( $scope, $http
     });
   }; // end testPost
 }]); // end testController
+
+// Angular Routing Set-up
+myApp.config(["$routeProvider",function($routeProvider){
+  $routeProvider.
+    when("/home", {
+      templateUrl: "/views/partials/home.html",
+      controller: "homeController"
+    }).
+    when("/artist", {
+      templateUrl: "/views/partials/artist.html",
+      controller: "artistController"
+    }).
+    when("/donate", {
+      templateUrl: "/views/partials/donate.html",
+      controller: "donateController"
+    }).
+    otherwise({
+      redirectTo: "/home"
+    });
+}]);// end NG-routing

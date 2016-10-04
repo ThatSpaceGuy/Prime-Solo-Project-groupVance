@@ -16,10 +16,11 @@ app.listen(portDecision, function(){
   if (verbose) {console.log('Server is listening on Heroku or port 3000');}
 });
 
-// base url hit
-app.get('/', function(req,res){
-  if (verbose) {console.log('base url hit');}
-  res.sendFile(path.resolve('public/views/index.html'));
+// setting catch all route
+app.get('/*', function(req,res){
+  if (verbose) {console.log('Made it to the catch all route!');}
+  var file = req.params[0] || 'views/index.html';
+  res.sendFile(path.resolve('public/', file));
 });
 
 // setup 'public' as a static resource

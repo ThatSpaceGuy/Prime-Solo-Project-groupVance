@@ -18,8 +18,15 @@ app.listen(portDecision, function(){
 
 // setting catch all route
 app.get('/*', function(req,res){
-  if (verbose) {console.log('Made it to the catch all route!');}
-  var file = req.params[0] || 'views/index.html';
+  if (verbose) {console.log('Made it to the catch all route, with',req.params);}
+  var file = req.params[0];
+
+  // checking for valid url
+  if (!file.includes('.')){
+    file = 'views/index.html';
+    // leave params untouched so that NG-routing can still use it
+  }
+  
   res.sendFile(path.resolve('public/', file));
 });
 

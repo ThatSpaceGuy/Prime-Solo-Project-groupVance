@@ -27,7 +27,7 @@ myApp.controller( 'testController', [ '$scope', '$http', function( $scope, $http
 }]); // end testController
 
 // Angular Routing Set-up
-myApp.config(["$routeProvider",function($routeProvider){
+myApp.config(["$routeProvider","$locationProvider", function($routeProvider,$locationProvider){
   $routeProvider.
     when("/home", {
       templateUrl: "/views/partials/home.html",

@@ -44,4 +44,7 @@ myApp.config(["$routeProvider",function($routeProvider){
     otherwise({
       redirectTo: "/home"
     });
+
+    // use the HTML5 History API for pretty URLs
+    $locationProvider.html5Mode(true);
 }]);// end NG-routing

@@ -7,8 +7,26 @@ TotalMercy.com is a full-stack web application to track daily intercession cente
 Versioning Plan
 ---------------
 * 0.1 - ReadMe & html/js/css/server/heroku handshakes - initial commit
-* 0.2 -
-* 0.3 -
-* 0.4 -
-* 0.5 -
-* 0.6 -
+
+
+Outline Plan
+------------
+•	Home Page
+  o	Scrolling Links to areas on Home
+    •	Who
+    •	What
+    •	Where
+    •	When
+    •	Why
+    •	How
+    •	Contact
+    •	E-mail address
+    •	Form – sends an e-mail to me
+      o	ReCapcha
+        •	RESEARCH - Medium
+      o	Log-in Button
+•	If logged in, this would be a Log-out button
+  o	Dashboard Link
+  o	Mercy Map Link
+  o	STRETCH - Routing Link to Artists
+  o	STRETCH - Routing Link to Donate

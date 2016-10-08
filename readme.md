@@ -30,3 +30,41 @@ Outline Plan
   o	Mercy Map Link
   o	STRETCH - Routing Link to Artists
   o	STRETCH - Routing Link to Donate
+
+•	Dashboard
+o	Navbar Links
+•	Home
+•	Log-out
+•	If logged out, then Log-in
+•	Mercy Map Link
+o	Get Preferred Name
+•	DB READ
+•	If logged out, then “Guest”
+o	Get Current timezone from user
+•	RESEARCH – Mild
+o	Personal Stats Box
+•	If logged out, then introductory message
+•	If logged in, then:
+•	Prayed today?
+o	Database READ for prayer that day
+o	If not, then Button for Yes
+•	Click: DB UPDATE
+o	If yes, then message saying thanks for praying today and Button for undo
+•	Click: DB DELETE
+•	You have covered # of days with prayer!
+o	DB READ
+•	Subscribed to e-mail Mercy Alerts?
+o	DB READ
+o	If yes, then:
+•	 unsubscribe button
+•	Click: Are you sure? – DB UPDATE
+•	Reminder at time of day field
+•	DB READ
+•	Update Button – required new time
+o	Click: Sure? – DB UPDATE
+o	If no, then subscribe button
+•	Click: Are you sure? – then DB UPDATE
+•	Reminder at time of day field required
+o	STRETCH – modify address to be different from Auth0 login
+•	E-mail verification – click link in e-mail
+•	RESEARCH – Medium

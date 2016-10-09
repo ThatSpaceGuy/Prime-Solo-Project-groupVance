@@ -68,3 +68,35 @@ o	If no, then subscribe button
 o	STRETCH – modify address to be different from Auth0 login
 •	E-mail verification – click link in e-mail
 •	RESEARCH – Medium
+
+o	Group Stats Box
+•	If logged out, then introductory message
+•	If logged in, then:
+•	Graph of group performance over last two weeks
+o	DB Read
+o	STRETCH – Change time from two weeks to:
+•	Month
+•	One week
+•	One day?
+•	Goal Date
+o	If true, then countdown to Goal Date
+•	DB READ
+o	If false, then countup from Start Date
+•	STRETCH - Leaderboard
+o	Option to make it more competitive
+•	STRETCH - Requests to approve past missed days as successes (someone’s on vacation in Boundary Waters)
+o	Requesting member needs reason box
+o	Other members need to see requests with Approve/Decline options
+o	Majority Approval is enough to approve
+o	STRETCH - Group Message Box
+•	If logged out, then introductory message
+•	If logged in, then:
+•	List of who in the group had a successful run:
+o	Option to “Hi-5” Successes
+•	Day
+•	Week
+•	Month
+•	Year
+•	EXTRA STRETCH - Option to message others in group
+o	See Messages from group members
+•	EXTRA STRETCH - Ability to pin these messages to Inspirational Box

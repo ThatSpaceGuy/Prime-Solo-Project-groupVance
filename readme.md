@@ -100,3 +100,44 @@ o	Option to “Hi-5” Successes
 •	EXTRA STRETCH - Option to message others in group
 o	See Messages from group members
 •	EXTRA STRETCH - Ability to pin these messages to Inspirational Box
+
+
+o	Inspirational Box
+•	Randomized Quote from array
+•	STRETCH – DB Table
+•	Randomized image from array
+•	STRETCH – DB Table
+•	STRETCH – Ability to pin quotes and/or images
+•	Requires DB table to save personalized message list
+o	Resources Box
+•	Links to Prayer Resources and Charities to Support
+•	STRETCH – Have these randomized and not static
+o	STRETCH – News Box
+•	Listing of relevant news stories
+
+•	Mercy Stats/Map
+o	Display number of TotalMercy Agents
+•	DB READ
+o	Display number of prayers that day
+•	DB READ
+o	Display of Time Zone Map where Hour of Mercy currently is
+•	Get Current time from user
+•	RESEARCH – Mild
+o	STRETCH – Display prayer coverage on the Map somehow…
+
+•	STRETCH - Artists Page
+o	Display information about Artists
+•	Sample for each
+•	Link to site for each
+o	EXTRA STRETCH – Artist DB Tables
+•	To track artist, images, sites
+•	Artist log-in and sign-up page then a possibility?
+
+•	STRETCH - Donate Page
+o	List Charities to support
+•	Blurb and image for each
+•	Link for each
+o	EXTRA STRETCH – Take donations for Total Mercy
+
+•	Database
+o	Set up tables and relationships

@@ -23,7 +23,6 @@ Outline Plan
       •	How
       •	Contact
         •	E-mail address
-
     o	Log-in Button
       •	If logged in, this would be a Log-out button
     o	Dashboard Link

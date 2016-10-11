@@ -67,7 +67,7 @@ CREATE TABLE shouts (
 	message VARCHAR,
 	created TIMESTAMP DEFAULT current_timestamp
 );
--- Cheer type will be "High-Five" or "Light a Fire" initially
+-- Cheer type will be "High Five" or "Light a Fire" initially
 CREATE TABLE cheers (
 	id SERIAL PRIMARY KEY,
 	type VARCHAR NOT NULL

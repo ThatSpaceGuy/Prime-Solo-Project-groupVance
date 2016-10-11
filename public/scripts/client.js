@@ -6,7 +6,7 @@ var myApp = angular.module( 'myApp', ['ngRoute'] );
 
 
 /// == JavaScript == ///
-myApp.controller( 'testController', [ '$scope', '$http', function( $scope, $http ){
+myApp.controller( 'navController', [ '$scope', '$http', function( $scope, $http ){
   console.log( 'NG' );
   $scope.testArray =[];
   $scope.counter=0;
@@ -33,9 +33,9 @@ myApp.config(["$routeProvider","$locationProvider", function($routeProvider,$loc
       templateUrl: "/views/partials/home.html",
       controller: "homeController"
     }).
-    when("/artist", {
-      templateUrl: "/views/partials/artist.html",
-      controller: "artistController"
+    when("/dashboard", {
+      templateUrl: "/views/partials/dashboard.html",
+      controller: "dashController"
     }).
     when("/donate", {
       templateUrl: "/views/partials/donate.html",

@@ -6,43 +6,32 @@ var myApp = angular.module( 'myApp', ['ngRoute'] );
 
 
 /// == JavaScript == ///
-myApp.controller( 'navController', [ '$scope', '$http', function( $scope, $http ){
+myApp.controller( 'navController', [ '$scope', function( $scope ){
   console.log( 'NG' );
-  $scope.testArray =[];
-  $scope.counter=0;
-  $scope.testPost = function(){
-    console.log( 'in test post' );
-    // assemble objectToSend
-    var objectToSend ={
-      myField: 'asdf'
-    }; //end object to send
-    $http({
-      method: 'POST',
-      url: '/postRoute',
-      data: objectToSend,
-    }).then(function successCallback( response ){
-      console.log( 'back from post:', response );
-    });
-  }; // end testPost
-}]); // end testController
+  $scope.linkList =[
+    {route:'home',text:'Home'},
+    {route:'dashboard',text:'Dashboard'},
+    {route:'donate',text:'Log In'}];
+
+}]); // end navController
 
 // Angular Routing Set-up
-myApp.config(["$routeProvider","$locationProvider", function($routeProvider,$locationProvider){
+myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
   $routeProvider.
-    when("/home", {
-      templateUrl: "/views/partials/home.html",
-      controller: "homeController"
+    when('/home', {
+      templateUrl: '/views/partials/home.html',
+      controller: 'homeController'
     }).
-    when("/dashboard", {
-      templateUrl: "/views/partials/dashboard.html",
-      controller: "dashController"
+    when('/dashboard', {
+      templateUrl: '/views/partials/dashboard.html',
+      controller: 'dashController'
     }).
-    when("/donate", {
-      templateUrl: "/views/partials/donate.html",
-      controller: "donateController"
+    when('/donate', {
+      templateUrl: '/views/partials/donate.html',
+      controller: 'donateController'
     }).
     otherwise({
-      redirectTo: "/home"
+      redirectTo: '/home'
     });
 
     // use the HTML5 History API for pretty URLs

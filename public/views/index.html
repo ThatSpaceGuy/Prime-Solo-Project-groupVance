@@ -13,10 +13,9 @@
 		<h1>The Agents of Total Mercy</h1>
 		<div ng-controller='navController'>
 			<p>
-				<a href="home">Home</a>
-				<a href="dashboard">Dashboard</a>
-				<a href="donate">Donate</a>
-				<a href="home">Log In</a>
+				<span ng-repeat="link in linkList">
+					<a href={{link.route}}>{{link.text}}</a>
+				</span>
 			</p>
     </div>
 

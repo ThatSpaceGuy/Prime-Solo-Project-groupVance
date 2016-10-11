@@ -15,20 +15,6 @@ app.listen(portDecision, function(){
   if (verbose) {console.log('Server is listening on Heroku or port 3000');}
 });
 
-// setting catch all route
-app.get('/*', function(req,res){
-  if (verbose) {console.log('Made it to the catch all route, with',req.params);}
-  var file = req.params[0];
-
-  // checking for valid url
-  if (!file.includes('.')){
-    file = 'views/index.html';
-    // leave params untouched so that NG-routing can still use it
-  }
-
-  res.sendFile(path.resolve('public/', file));
-});
-
 // setup 'public' as a static resource
 app.use(express.static('public'));
 
@@ -55,12 +41,13 @@ app.get('/getRouteDB', function(req,res){
       /////// --------- Use to get info from Database --------- ///////
       var resultsArray=[];
       //// --------NEED TO EDIT SQL Query
-      var queryResults=client.query('SELECT * FROM members WHERE log_email="'+loginEmail+'";');
+      console.log('SELECT * FROM members WHERE log_email="'+loginEmail+'";');
+      var queryResults=client.query('SELECT * FROM members WHERE log_email=\''+loginEmail+'\';');
       queryResults.on('row',function(row){
         resultsArray.push(row);
       });
-      if (verbose) {console.log('resultsArray from getRouteDB query:',resultsArray);}
       queryResults.on('end',function(){
+        if (verbose) {console.log('resultsArray from getRouteDB query:',resultsArray);}
         done();
         return res.send(resultsArray);
       }); // end queryResults.on('end')
@@ -136,3 +123,17 @@ app.delete( '/deleteRouteDB', function( req, res ){
     }
   });
 });//end /deleteRoute
+
+// setting catch all route
+app.get('/*', function(req,res){
+  if (verbose) {console.log('Made it to the catch all route, with',req.params);}
+  var file = req.params[0];
+
+  // checking for valid url
+  if (!file.includes('.')){
+    file = 'views/index.html';
+    // leave params untouched so that NG-routing can still use it
+  }
+
+  res.sendFile(path.resolve('public/', file));
+});

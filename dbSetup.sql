@@ -53,7 +53,7 @@ CREATE TABLE team_zone (
 CREATE TABLE zones (
 	id SERIAL PRIMARY KEY,
 	designation VARCHAR,
-	24_position FLOAT
+	H24_position FLOAT
 );
 
 CREATE TABLE shouts (

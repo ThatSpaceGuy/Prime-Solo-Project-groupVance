@@ -4,8 +4,7 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var pg = require('pg');
-//// --------NEED TO ENTER ***: Database Name
-var connectionString = 'postgress://localhost:5432/***';
+var connectionString = 'postgress://localhost:5432/TotalMercyDB';
 
 app.use(bodyParser.urlencoded( {extended: false } ));
 app.use(bodyParser.json());
@@ -26,7 +25,7 @@ app.get('/*', function(req,res){
     file = 'views/index.html';
     // leave params untouched so that NG-routing can still use it
   }
-  
+
   res.sendFile(path.resolve('public/', file));
 });
 
@@ -45,8 +44,8 @@ app.get('/getRoute', function(req,res){
 
 // GET route with a Database call
 app.get('/getRouteDB', function(req,res){
-  // Code for basic get response
   console.log( '/getRouteDB hit' );
+  var loginEmail = "ReachLuis@gmail.com";
   pg.connect(connectionString, function(err, client, done){
     if (err){
       if (verbose) {console.log(err);}
@@ -56,7 +55,7 @@ app.get('/getRouteDB', function(req,res){
       /////// --------- Use to get info from Database --------- ///////
       var resultsArray=[];
       //// --------NEED TO EDIT SQL Query
-      var queryResults=client.query('SELECT * FROM <table> ORDER BY <field1>, <field2>;');
+      var queryResults=client.query('SELECT * FROM members WHERE log_email="'+loginEmail+'";');
       queryResults.on('row',function(row){
         resultsArray.push(row);
       });

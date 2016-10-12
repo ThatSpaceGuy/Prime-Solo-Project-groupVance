@@ -29,20 +29,22 @@ app.get('/getRoute', function(req,res){
 }); // end app.get getRoute
 
 // GET route with a Database call
-app.get('/getRouteDB', function(req,res){
-  console.log( '/getRouteDB hit' );
-  var loginEmail = "ReachLuis@gmail.com";
+app.get('/getMemberDB', function(req,res){
+  console.log( '/getMemberDB hit' );
+  var memberSearch = {
+    fieldName: 'log_email',
+    fieldValue: 'ReachLuis@gmail.com'};
   pg.connect(connectionString, function(err, client, done){
     if (err){
       if (verbose) {console.log(err);}
     } else {
-      if (verbose) {console.log('app.get/getRouteDB connected');}
+      if (verbose) {console.log('app.get/getMemberDB connected');}
 
       /////// --------- Use to get info from Database --------- ///////
       var resultsArray=[];
       //// --------NEED TO EDIT SQL Query
-      console.log('SELECT * FROM members WHERE log_email="'+loginEmail+'";');
-      var queryResults=client.query('SELECT * FROM members WHERE log_email=\''+loginEmail+'\';');
+      var queryResults=client.query('SELECT * FROM members WHERE '+
+        memberSearch.fieldName+'=\''+memberSearch.fieldValue+'\';');
       queryResults.on('row',function(row){
         resultsArray.push(row);
       });

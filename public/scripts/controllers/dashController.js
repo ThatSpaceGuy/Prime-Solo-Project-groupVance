@@ -1,8 +1,9 @@
 myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   console.log('Dashboard Controller');
-  // Global variables
+  //// Global variables
   // for testing - to be replaced by Auth0 logic
   var loggedIn = true;
+  $scope.stepDone = true;
 
   $scope.getMember = function(){
     console.log( 'in test post' );
@@ -36,4 +37,14 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     // otherwise, call them "Guest"
     $scope.currentUser = {pref_name: 'Guest'};
   }
+
+
+  //// Prayer Stats Box Code
+  $scope.takeStep = function(){
+    $scope.stepDone = true;
+  };
+
+  $scope.undoStep = function(){
+    $scope.stepDone = false;
+  };
 }]);

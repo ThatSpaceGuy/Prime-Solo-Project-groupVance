@@ -5,9 +5,13 @@
   </div>
   <div id="statsBox" class="group">
     <div id="personalStatsBox" class="group">
-      <div>
-        <p class="verticalCenter">Have you prayed today?</p>
-        <button type="button" id="stepToday">Yes!</button>
+      <div ng-if="stepDone == false">
+        <p>Have you prayed today?</p>
+        <button type="button" id="takeStepButton" ng-click="takeStep()">Yes!</button>
+      </div>
+      <div ng-if="stepDone == true">
+        <p>Thanks for praying today!</p>
+        <button type="button" id="undoStepButton" ng-click="undoStep()">Undo Today's "Yes"</button>
       </div>
     </div>
     <div id="groupStatsBox" class="group">

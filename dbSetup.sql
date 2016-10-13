@@ -10,14 +10,14 @@ CREATE TABLE members (
 	twitter VARCHAR,
 	sms VARCHAR,
 	team_id INTEGER,
-	created TIMESTAMP DEFAULT current_timestamp
+	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );
 -- Table to track steps taken each day
 CREATE TABLE steps (
 	id SERIAL PRIMARY KEY,
 	member_id INTEGER NOT NULL,
 	action_id INTEGER NOT NULL,
-	created TIMESTAMP DEFAULT current_timestamp
+	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );
 -- Table to track the kinds of actions people are taking
 CREATE TABLE actions (
@@ -29,7 +29,7 @@ CREATE TABLE groups (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR NOT NULL,
 	action_id INTEGER,
-	created TIMESTAMP DEFAULT current_timestamp
+	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );
 -- Join table for members and groups
 CREATE TABLE member_group (
@@ -37,7 +37,7 @@ CREATE TABLE member_group (
 	member_id INTEGER NOT NULL,
   member_action INTEGER NOT NULL,
 	group_id INTEGER NOT NULL,
-	created TIMESTAMP DEFAULT current_timestamp
+	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );
 -- Teams table with the title of each team
 CREATE TABLE teams (
@@ -65,7 +65,7 @@ CREATE TABLE shouts (
 	runner_id INTEGER NOT NULL,
 	cheer_id INTEGER NOT NULL,
 	message VARCHAR,
-	created TIMESTAMP DEFAULT current_timestamp
+	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );
 -- Cheer type will be "High Five" or "Light a Fire" initially
 CREATE TABLE cheers (

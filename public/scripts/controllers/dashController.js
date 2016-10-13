@@ -8,15 +8,8 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   $scope.getMember = function(){
     console.log( 'in getMember()' );
 
-    // Logic to find today
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-
-    if(dd<10) {dd='0'+dd;} if(mm<10) {mm='0'+mm;}
-
-    today = yyyy+'-'+mm+'-'+dd+' 00:00:00';
+    // Logic to find lastDay
+    lastDay = moment().subtract(1, 'days').endOf('day').format();
     // assemble objectToSend
     var logInfoToSend = {
       fieldName: 'log_email',
@@ -41,10 +34,10 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       if (dbUser.step_id){
         // count the number of steps taken
         $scope.userSteps = response.data.length;
-        // check for step done today
+        // check for step done lastDay
         console.log('lastStep:',dbUser.step_created);
-        console.log('today:', today);
-        if (dbUser.step_created>today) {
+        console.log('lastDay:', lastDay);
+        if (moment(lastDay).isBefore(dbUser.step_created)) {
           $scope.stepDone = true;
           $scope.currentStep = {id: dbUser.step_id};
         } else {
@@ -67,9 +60,6 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     // otherwise, call them "Guest"
     $scope.currentUser = {pref_name: 'Guest'};
   } // end loggedIn check
-
-
-
 
   //// Prayer Stats Box Code
   $scope.takeStep = function(){

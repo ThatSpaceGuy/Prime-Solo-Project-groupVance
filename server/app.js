@@ -4,6 +4,7 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var pg = require('pg');
+var moment = require('moment');
 var connectionString = 'postgress://localhost:5432/TotalMercyDB';
 
 app.use(bodyParser.urlencoded( {extended: false } ));
@@ -45,7 +46,7 @@ app.post('/getMemberDB', function(req,res){
         ' ORDER BY step_id DESC;');
         queryResults.on('row',function(row){
           console.log(row.step_created);
-          row.step_created = row.step_created.toString().slice(4,24);
+          row.step_created = moment(row.step_created,true).format();
           console.log(row.step_created);
           resultsArray.push(row);
         });

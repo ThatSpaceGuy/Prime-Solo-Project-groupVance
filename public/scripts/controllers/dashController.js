@@ -2,7 +2,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   console.log('Dashboard Controller');
   //// Global variables
   // for testing - to be replaced by Auth0 logic
-  var loggedIn = true;
+  $scope.loggedIn = true;
   $scope.stepDone = false;
 
   $scope.getMember = function(){
@@ -53,7 +53,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   }; // end getMember
 
   // if a Member is loggedIn
-  if (loggedIn){
+  if ($scope.loggedIn){
     // get their info
     $scope.getMember();
   } else {

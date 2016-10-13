@@ -1,17 +1,25 @@
 <div class="container">
   <div id="dashWelcome">
     <p>Hello, {{currentUser.pref_name}}!</p>
-    <p>Thank you for interceding on behalf of those who need it most!</p>
+    <p ng-if="loggedIn == true">Thank you for interceding on behalf of those who need it most!</p>
+    <p ng-if="loggedIn == false">Please read below for a tour of the Member Dashboard!</p>
   </div>
   <div id="statsBox" class="group">
     <div id="personalStatsBox" class="group">
-      <div ng-if="stepDone == false">
-        <p>Have you prayed today?</p>
-        <button type="button" id="takeStepButton" ng-click="takeStep()">Yes!</button>
+      <div ng-if="loggedIn == false">
+        <p>This is the Personal Stats Box.</p>
+        <p>This is where you would check-in daily on your mission.</p>
+        <button type="button" id="tourButton">Button to log progress</button>
       </div>
-      <div ng-if="stepDone == true">
-        <p>Thanks for praying today!</p>
-        <button type="button" id="undoStepButton" ng-click="undoStep()">Undo Today's "Yes"</button>
+      <div ng-if="loggedIn == true">
+        <div ng-if="stepDone == false">
+          <p>Have you prayed today?</p>
+          <button type="button" id="takeStepButton" ng-click="takeStep()">Yes!</button>
+        </div>
+        <div ng-if="stepDone == true">
+          <p>Thanks for praying today!</p>
+          <button type="button" id="undoStepButton" ng-click="undoStep()">Undo Today's "Yes"</button>
+        </div>
       </div>
     </div>
     <div id="groupStatsBox" class="group">

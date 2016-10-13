@@ -33,7 +33,7 @@ app.use(express.static('public'));
 app.post('/getMemberDB', function(req,res){
   console.log( '/getMemberDB hit with:',req.body );
 
-  var memberSearch = req.body;
+  var memberSearch = req.body.memberValue;
     pg.connect(connectionString, function(err, client, done){
       if (err){
         if (verbose) {console.log(err);}
@@ -41,12 +41,27 @@ app.post('/getMemberDB', function(req,res){
         if (verbose) {console.log('app.post/getMemberDB connected');}
 
         var resultsArray=[];
-        var queryResults=client.query('SELECT * FROM members_join_info '+
-        'WHERE '+memberSearch.fieldName+'=\''+memberSearch.fieldValue+'\''+
-        ' ORDER BY step_id DESC;');
+        var queryResults=client.query('SELECT *, '+
+        'CASE log_email WHEN \''+memberSearch+'\' THEN 1 ELSE 0 END AS thismem '+
+        'FROM members_join_info WHERE group_title = '+
+        '(SELECT group_title FROM members_join_groups '+
+        'WHERE log_email=\''+memberSearch+'\') '+
+        'ORDER BY thismem DESC, log_email, step_id DESC;');
         queryResults.on('row',function(row){
           // Using Moment.js to normalize time information
-          row.step_created = moment(row.step_created,true).format();
+          var memTime = row.member_created;
+          var grTime = row.group_created;
+          var stTime = row.step_created;
+          // but only normalize time, if time info exists
+          if (memTime){
+            row.member_created = moment(memTime,true).format();
+          }
+          if (grTime){
+          row.group_created = moment(grTime,true).format();
+          }
+          if (stTime){
+            row.step_created = moment(stTime,true).format();
+          }
           resultsArray.push(row);
         });
         queryResults.on('end',function(){

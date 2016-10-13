@@ -1,7 +1,7 @@
 console.log('scripts.js sourced!');
 /// == Global Variable Declarations == ///
 var verbose = true; // if (verbose) {console.log('');}
-var myApp = angular.module( 'myApp', ['ngRoute'] );
+var myApp = angular.module( 'myApp', ['ngRoute', 'ui.grid'] );
 /// == Function Declarations == ///
 
 

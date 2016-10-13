@@ -1,9 +1,12 @@
 myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   console.log('Dashboard Controller');
   //// Global variables
-  // for testing - to be replaced by Auth0 logic
-  $scope.loggedIn = true;
-  $scope.stepDone = false;
+  // for testing
+  $scope.loggedIn = true; // to be replaced by Auth0 logic
+
+  // initialize values
+  $scope.userSteps = 0;
+  $scope.currentGroup = {data: [{}]};
 
   $scope.getMember = function(){
     console.log( 'in getMember()' );
@@ -12,8 +15,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     lastDay = moment().subtract(1, 'days').endOf('day').format();
     // assemble objectToSend
     var logInfoToSend = {
-      fieldName: 'log_email',
-      fieldValue: 'Lui.Matos@gmail.com'
+      memberValue: 'Lui.Matos@gmail.com'
     }; //end object to send
     $http({
       method: 'POST',
@@ -22,7 +24,8 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     }).then(function successCallback( response ){
       console.log( 'back from post:', response );
       // set latest Step information to currentUser
-      $scope.currentUser = response.data[0];
+      var dbGroup = response.data;
+      $scope.currentUser = dbGroup[0];
       var dbUser = $scope.currentUser;
       // check to see if a preferred name exists
       if (!dbUser.pref_name){
@@ -33,25 +36,24 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       //// Set initial step info for user
       // if user has ever taken a step
       if (dbUser.step_id){
-        // count the number of steps taken
-        $scope.userSteps = response.data.length;
-        // check for step done after lastDay
+        // count the number of steps taken by currentUser
+        for (var i = 0; i < dbGroup.length; i++) {
+          if(dbGroup[i].log_email === dbUser.log_email){
+            $scope.userSteps++;
+          } // end if incrementer
+        } // end counting for loop
+
+        // check if last step was taken today
         if (moment(lastDay).isBefore(dbUser.step_created)) {
           // then a step was taken today
           $scope.stepDone = true;
           // capture id of last step to be able to delete it
           $scope.currentStep = {id: dbUser.step_id};
-        } else {
-          // then no step was taken today
-          $scope.stepDone = false;
         }
-      } else {
-        // They haven't taken a step yet, so count is 0
-        $scope.userSteps = 0;
       }
       console.log('num steps:', $scope.userSteps);
       //// Set group info for user
-
+      $scope.currentGroup = {data: dbGroup};
 
     }); // end http POST call
   }; // end getMember
@@ -87,6 +89,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         // set relevant part of response to currentStep
         $scope.currentStep = response.data;
         console.log($scope.currentStep);
+        // increment the counter accordingly
         $scope.userSteps++;
       }); // end http POST call
       $scope.stepDone = true;
@@ -109,8 +112,10 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         headers: {"Content-Type": "application/json;charset=utf-8"}
       }).then(function successCallback( response ){
         console.log( 'back from post:', response );
+        // reset flags and variables
         $scope.stepDone = false;
         $scope.currentStep = undefined;
+        // decrement the counter accordingly
         $scope.userSteps--;
       }); // end http DELETE call
     }

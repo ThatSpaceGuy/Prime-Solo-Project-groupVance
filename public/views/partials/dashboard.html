@@ -4,6 +4,7 @@
     <p ng-if="loggedIn == true">Thank you for interceding on behalf of those who need it most!</p>
     <p ng-if="loggedIn == false">Please read below for a tour of the Member Dashboard!</p>
   </div>
+  <div class="row">
   <div id="personalStatsBox">
     <div ng-if="loggedIn == false">
       <p>This is the Personal Stats Box.</p>
@@ -29,10 +30,11 @@
     </div>
     <div ng-if="loggedIn == true">
       <p>You are a member of {{currentUser.group_title}}</p>
-      <p></p>
+      <p>Here are the {{currentUser.group_title}} stats for the past week.</p>
+      <div ui-grid="currentGroup" class="groupStatsGrid"></div>
     </div>
   </div>
-
+  </div>
   <div id="groupMessageBox">
 
   </div>

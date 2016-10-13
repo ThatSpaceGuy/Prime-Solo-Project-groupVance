@@ -42,7 +42,7 @@ app.post('/getMemberDB', function(req,res){
         var resultsArray=[];
         var queryResults=client.query('SELECT * FROM members_join_steps '+
         'WHERE '+memberSearch.fieldName+'=\''+memberSearch.fieldValue+'\''+
-        ' ORDER BY step_id DESC LIMIT 1;');
+        ' ORDER BY step_id DESC;');
         queryResults.on('row',function(row){
           resultsArray.push(row);
         });

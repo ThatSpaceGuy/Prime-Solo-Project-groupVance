@@ -21,7 +21,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     // assemble objectToSend
     var logInfoToSend = {
       fieldName: 'log_email',
-      fieldValue: 'ReachLuis@gmail.com'
+      fieldValue: 'Lui.Matos@gmail.com'
     }; //end object to send
     $http({
       method: 'POST',
@@ -29,7 +29,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       data: logInfoToSend
     }).then(function successCallback( response ){
       console.log( 'back from post:', response );
-      // set relevant part of response to currentUser
+      // set latest Step information to currentUser
       $scope.currentUser = response.data[0];
       var dbUser = $scope.currentUser;
       // check to see if a preferred name exists
@@ -40,6 +40,8 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       console.log('currentUser:',$scope.currentUser);
       // if user has ever taken a step
       if (dbUser.step_id){
+        // count the number of steps taken
+        $scope.userSteps = response.data.length;
         // check for step done today
         if (dbUser.step_created>today) {
           $scope.stepDone = true;
@@ -47,11 +49,15 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         } else {
           $scope.stepDone = false;
         }
+      } else {
+        $scope.userSteps = 0;
       }
 
-    }); // end http GET call
+      console.log('num steps:', $scope.userSteps);
+    }); // end http POST call
   }; // end getMember
 
+  
   // if a Member is loggedIn
   if ($scope.loggedIn){
     // get their info
@@ -59,7 +65,9 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   } else {
     // otherwise, call them "Guest"
     $scope.currentUser = {pref_name: 'Guest'};
-  }
+  } // end loggedIn check
+
+
 
 
   //// Prayer Stats Box Code
@@ -81,8 +89,9 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       }).then(function successCallback( response ){
         console.log( 'back from post:', response );
         // set relevant part of response to currentStep
-        $scope.currentStep = response.data[0];
+        $scope.currentStep = response.data;
         console.log($scope.currentStep);
+        $scope.userSteps++;
       }); // end http POST call
       $scope.stepDone = true;
     }
@@ -106,6 +115,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         console.log( 'back from post:', response );
         $scope.stepDone = false;
         $scope.currentStep = undefined;
+        $scope.userSteps--;
       }); // end http DELETE call
     }
   };

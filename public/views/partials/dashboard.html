@@ -12,6 +12,7 @@
         <button type="button" id="tourButton">Button to log progress</button>
       </div>
       <div ng-if="loggedIn == true">
+        <p>You have fulfilled your daily mission {{userSteps}} times!</p>
         <div ng-if="stepDone == false">
           <p>Have you prayed today?</p>
           <button type="button" id="takeStepButton" ng-click="takeStep()">Yes!</button>

@@ -17,7 +17,6 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     if(dd<10) {dd='0'+dd;} if(mm<10) {mm='0'+mm;}
 
     today = yyyy+'-'+mm+'-'+dd+' 00:00:00';
-
     // assemble objectToSend
     var logInfoToSend = {
       fieldName: 'log_email',
@@ -43,6 +42,8 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         // count the number of steps taken
         $scope.userSteps = response.data.length;
         // check for step done today
+        console.log('lastStep:',dbUser.step_created);
+        console.log('today:', today);
         if (dbUser.step_created>today) {
           $scope.stepDone = true;
           $scope.currentStep = {id: dbUser.step_id};
@@ -57,7 +58,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     }); // end http POST call
   }; // end getMember
 
-  
+
   // if a Member is loggedIn
   if ($scope.loggedIn){
     // get their info

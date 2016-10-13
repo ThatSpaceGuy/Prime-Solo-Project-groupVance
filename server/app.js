@@ -44,6 +44,9 @@ app.post('/getMemberDB', function(req,res){
         'WHERE '+memberSearch.fieldName+'=\''+memberSearch.fieldValue+'\''+
         ' ORDER BY step_id DESC;');
         queryResults.on('row',function(row){
+          console.log(row.step_created);
+          row.step_created = row.step_created.toString().slice(4,24);
+          console.log(row.step_created);
           resultsArray.push(row);
         });
         queryResults.on('end',function(){

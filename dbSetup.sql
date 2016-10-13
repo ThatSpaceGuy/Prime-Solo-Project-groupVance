@@ -5,7 +5,7 @@ CREATE TABLE members (
 	first_name VARCHAR NOT NULL,
 	last_name VARCHAR NOT NULL,
 	pref_name VARCHAR,
-  log_email VARCHAR NOT NULL,
+  log_email VARCHAR NOT NULL UNIQUE,
 	alert_email VARCHAR,
 	twitter VARCHAR,
 	sms VARCHAR,
@@ -27,7 +27,7 @@ CREATE TABLE actions (
 -- Table for groups
 CREATE TABLE groups (
 	id SERIAL PRIMARY KEY,
-	title VARCHAR NOT NULL,
+	title VARCHAR NOT NULL UNIQUE,
 	action_id INTEGER,
 	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );

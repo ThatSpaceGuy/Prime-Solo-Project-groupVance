@@ -41,13 +41,12 @@ app.post('/getMemberDB', function(req,res){
         if (verbose) {console.log('app.post/getMemberDB connected');}
 
         var resultsArray=[];
-        var queryResults=client.query('SELECT * FROM members_join_steps '+
+        var queryResults=client.query('SELECT * FROM members_join_info '+
         'WHERE '+memberSearch.fieldName+'=\''+memberSearch.fieldValue+'\''+
         ' ORDER BY step_id DESC;');
         queryResults.on('row',function(row){
-          console.log(row.step_created);
+          // Using Moment.js to normalize time information
           row.step_created = moment(row.step_created,true).format();
-          console.log(row.step_created);
           resultsArray.push(row);
         });
         queryResults.on('end',function(){

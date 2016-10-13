@@ -4,29 +4,35 @@
     <p ng-if="loggedIn == true">Thank you for interceding on behalf of those who need it most!</p>
     <p ng-if="loggedIn == false">Please read below for a tour of the Member Dashboard!</p>
   </div>
-  <div id="statsBox" class="group">
-    <div id="personalStatsBox" class="group">
-      <div ng-if="loggedIn == false">
-        <p>This is the Personal Stats Box.</p>
-        <p>This is where you would check-in daily on your mission.</p>
-        <button type="button" id="tourButton">Button to log progress</button>
-      </div>
-      <div ng-if="loggedIn == true">
-        <p>You have fulfilled your daily mission {{userSteps}} time<span ng-if="userSteps!=1">s</span>!</p>
-        <div ng-if="stepDone == false">
-          <p>Have you prayed today?</p>
-          <button type="button" id="takeStepButton" ng-click="takeStep()">Yes!</button>
-        </div>
-        <div ng-if="stepDone == true">
-          <p>Thanks for praying today!</p>
-          <button type="button" id="undoStepButton" ng-click="undoStep()">Undo Today's "Yes"</button>
-        </div>
-      </div>
+  <div id="personalStatsBox">
+    <div ng-if="loggedIn == false">
+      <p>This is the Personal Stats Box.</p>
+      <p>This is where you would check-in daily on your mission.</p>
+      <button type="button" id="tourButton">Button to log progress</button>
     </div>
-    <div id="groupStatsBox" class="group">
-
+    <div ng-if="loggedIn == true">
+      <p>You have fulfilled your daily mission {{userSteps}} time<span ng-if="userSteps!=1">s</span>!</p>
+      <div ng-if="stepDone == false">
+        <p>Have you prayed today?</p>
+        <button type="button" id="takeStepButton" ng-click="takeStep()">Yes!</button>
+      </div>
+      <div ng-if="stepDone == true">
+        <p>Thanks for praying today!</p>
+        <button type="button" id="undoStepButton" ng-click="undoStep()">Undo Today's "Yes"</button>
+      </div>
     </div>
   </div>
+  <div id="groupStatsBox">
+    <div ng-if="loggedIn == false">
+      <p>This is the Group Stats Box.</p>
+      <p>This is where you would see how well your group is doing in achieving their goals.</p>
+    </div>
+    <div ng-if="loggedIn == true">
+      <p>You are a member of {{currentUser.group_title}}</p>
+      <p></p>
+    </div>
+  </div>
+
   <div id="groupMessageBox">
 
   </div>

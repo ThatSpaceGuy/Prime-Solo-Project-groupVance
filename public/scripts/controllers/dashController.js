@@ -30,24 +30,29 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         $scope.currentUser.pref_name = dbUser.first_name;
       }
       console.log('currentUser:',$scope.currentUser);
+      //// Set initial step info for user
       // if user has ever taken a step
       if (dbUser.step_id){
         // count the number of steps taken
         $scope.userSteps = response.data.length;
-        // check for step done lastDay
-        console.log('lastStep:',dbUser.step_created);
-        console.log('lastDay:', lastDay);
+        // check for step done after lastDay
         if (moment(lastDay).isBefore(dbUser.step_created)) {
+          // then a step was taken today
           $scope.stepDone = true;
+          // capture id of last step to be able to delete it
           $scope.currentStep = {id: dbUser.step_id};
         } else {
+          // then no step was taken today
           $scope.stepDone = false;
         }
       } else {
+        // They haven't taken a step yet, so count is 0
         $scope.userSteps = 0;
       }
-
       console.log('num steps:', $scope.userSteps);
+      //// Set group info for user
+
+
     }); // end http POST call
   }; // end getMember
 

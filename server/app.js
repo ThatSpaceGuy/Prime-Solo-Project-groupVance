@@ -40,14 +40,14 @@ app.post('/getMemberDB', function(req,res){
       } else {
         if (verbose) {console.log('app.post/getMemberDB connected');}
 
-        var resultsArray=[];
-        var queryResults=client.query('SELECT *, '+
+        var membersArray=[];
+        var membersQueryRes=client.query('SELECT *, '+
         'CASE log_email WHEN \''+memberSearch+'\' THEN 1 ELSE 0 END AS thismem '+
         'FROM members_join_info WHERE group_title = '+
         '(SELECT group_title FROM members_join_groups '+
         'WHERE log_email=\''+memberSearch+'\') '+
         'ORDER BY thismem DESC, log_email, step_id DESC;');
-        queryResults.on('row',function(row){
+        membersQueryRes.on('row',function(row){
           // Using Moment.js to normalize time information
           var memTime = row.member_created;
           var grTime = row.group_created;
@@ -62,13 +62,22 @@ app.post('/getMemberDB', function(req,res){
           if (stTime){
             row.step_created = moment(stTime,true).format();
           }
-          resultsArray.push(row);
+          membersArray.push(row);
         });
-        queryResults.on('end',function(){
-          if (verbose) {console.log('resultsArray from query:',resultsArray);}
-          done();
-          return res.send(resultsArray);
-        }); // end queryResults.on('end')
+        membersQueryRes.on('end',function(){
+          if (verbose) {console.log('membersArray from query:',membersArray);}
+          var shoutsArray=[];
+          var shoutsQueryRes=client.query('SELECT * FROM received_shouts '+
+          'WHERE runner_email=\''+memberSearch+'\';');
+          shoutsQueryRes.on('row',function(row){
+            shoutsArray.push(row);
+          });
+          shoutsQueryRes.on('end',function(){
+            if (verbose) {console.log('shoutsArray from query:',shoutsArray);}
+            done();
+            return res.send([membersArray,shoutsArray]);
+          }); // end shoutsQueryRes.on('end')
+        }); // end membersQueryRes.on('end')
       }// end else
     }); // end pg.connect
   }); // end app.post getRoute

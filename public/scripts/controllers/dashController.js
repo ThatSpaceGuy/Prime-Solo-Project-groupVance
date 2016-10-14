@@ -57,7 +57,7 @@ function($scope, $http,uiGridConstants){
     }).then(function successCallback( response ){
       console.log( 'back from post:', response );
       // store all group data
-      var dbGroup = response.data;
+      var dbGroup = response.data[0];
       // set latest Step information to currentUser
       var dbUser = dbGroup[0];
       $scope.currentUser = dbUser;
@@ -66,6 +66,7 @@ function($scope, $http,uiGridConstants){
         // if not, set it equal to first_name
         $scope.currentUser.pref_name = dbUser.first_name;
       }
+      $scope.currentUser.memberHandle = $scope.currentUser.pref_name + dbUser.member_id;
       console.log('currentUser:',$scope.currentUser);
       //// Set initial step info for user
       // if user has ever taken a step
@@ -86,42 +87,49 @@ function($scope, $http,uiGridConstants){
       // loop over every record in dbGroup - all data returned from DB
       for (var j = 0; j < dbGroup.length; j++) {
         // Grabbing info for DRYness
-        memberEmail = dbGroup[j].log_email;
         memberStep = dbGroup[j].step_created;
         memberName = dbGroup[j].pref_name;
-
-        if (!groupData[memberEmail]){
+        if (!memberName){
+          memberName = dbGroup[j].first_name;
+        }
+        memberHandle = memberName+dbGroup[j].member_id;
+        console.log('memberHandle:',memberHandle);
+        if (!groupData[memberHandle]){
           // if ther is no entry yet, then initialize everything for that member
-          groupData[memberEmail]={};
-          groupData[memberEmail].numSteps = 0;
-          groupData[memberEmail].stepArray = [];
-          if (!memberName){
-            groupData[memberEmail].prefName = dbGroup[j].first_name;
-          } else {
-            groupData[memberEmail].prefName = memberName;
-          }
+          groupData[memberHandle]={};
+          groupData[memberHandle].prefName = memberName;
+          groupData[memberHandle].numSteps = 0;
+          groupData[memberHandle].stepArray = [];
+          groupData[memberHandle].member_id = dbGroup[j].member_id;
         }
         // count this step
-        groupData[memberEmail].numSteps++;
+        groupData[memberHandle].numSteps++;
 
         // check if step was taken within the past week
         if (moment(memberStep).isAfter(moment(lastWeek))) {
           // if so, then keep track of it for display
-          groupData[memberEmail].stepArray.push(memberStep);
+          groupData[memberHandle].stepArray.push(memberStep);
         }
       }
       console.log('groupData:',groupData);
+      // grab steps of currentUser for personal stats box
+      $scope.userSteps = groupData[dbUser.memberHandle].numSteps;
+      console.log('num steps:', $scope.userSteps);
+
       // Now that the group data is ready, build gridData
       // initialize variables
       var memberIndex = -1;
       var dayOfStep;
       var stepsToCheck;
-      // loop over ever property in groupData
+      // loop over every property in groupData
       for (var groupMember in groupData) {
         // if the property is actually a groupMember
         if (groupData.hasOwnProperty(groupMember)) {
           console.log('found:',groupMember);
           memberIndex++; // Prepare the memberIndex
+          if (groupData[groupMember].member_id == $scope.currentUser.member_id){
+            $scope.currentUser.memberIndex = memberIndex;
+          }
           console.log('memberIndex',memberIndex);
           gridData[memberIndex]={};
           // set prefName for Member column
@@ -130,31 +138,27 @@ function($scope, $http,uiGridConstants){
           // loop over every day in the last week
           for (var l = 0; l < searchDays.length; l++) {
             // grab the weekday for the column name
-            dateCol = searchDays[l];
-            console.log('dateCol:',dateCol);
-            // initialize empty value for dateCol - overridden if appropriate
-            gridData[memberIndex][dateCol] = '';
+            ColumnDate = searchDays[l];
+            console.log('ColumnDate:',ColumnDate);
+            // initialize empty value for ColumnDate - overridden if appropriate
+            gridData[memberIndex][ColumnDate] = '';
             // loop over every step the member took in the last week
             for (var i = 0; i < stepsToCheck.length; i++) {
               // grab the weekday that the step was taken
-              console.log('stepsToCheck:',stepsToCheck,'i:',i);
               dayOfStep = moment(stepsToCheck[i]).format('dd');
-              console.log('dayOfStep:',dayOfStep);
               // if it matches the column name
-              if (dayOfStep === dateCol){
+              if (dayOfStep === ColumnDate){
                 // then make an X in that column
-                gridData[memberIndex][dateCol] = 'X';
+                gridData[memberIndex][ColumnDate] = 'X';
               }
             }
           }
         }
-      }
+      } // end loop over every property in groupData
+
       console.log(gridData);
       // assign the gridData to be displayed by ui-grid
       $scope.currentGroup = {data: gridData};
-      // grab steps of currentUser for personal stats box
-      $scope.userSteps = groupData[dbUser.log_email].numSteps;
-      console.log('num steps:', $scope.userSteps);
     }); // end http POST call
   }; // end getMember
 
@@ -187,16 +191,16 @@ function($scope, $http,uiGridConstants){
       }).then(function successCallback( response ){
         console.log( 'back from post:', response );
         // set relevant part of response to currentStep
-        $scope.currentStep = response.data;
+        $scope.currentStep = response.data[0];
         console.log($scope.currentStep);
         // increment the counter accordingly
         $scope.userSteps++;
         // add the appropriate X to the gridData
-          // [0] is index of currentUser in data
+          // [$scope.currentUser.memberIndex] is index of currentUser in data
           // searchDays[6] is current Day's property in the Object
-        $scope.currentGroup.data[0][searchDays[6]]='X';
+        $scope.currentGroup.data[$scope.currentUser.memberIndex][searchDays[6]]='X';
+        $scope.stepDone = true;
       }); // end http POST call
-      $scope.stepDone = true;
     }
   };
 
@@ -222,9 +226,9 @@ function($scope, $http,uiGridConstants){
         // decrement the counter accordingly
         $scope.userSteps--;
         // remove the appropriate X to the gridData
-          // [0] is index of currentUser in data
+          // [$scope.currentUser.memberIndex] is index of currentUser in data
           // searchDays[6] is current Day's property in the Object
-        $scope.currentGroup.data[0][searchDays[6]]='';
+        $scope.currentGroup.data[$scope.currentUser.memberIndex][searchDays[6]]='';
       }); // end http DELETE call
     }
   };

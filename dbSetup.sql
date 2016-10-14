@@ -72,3 +72,7 @@ CREATE TABLE cheers (
 	id SERIAL PRIMARY KEY,
 	type VARCHAR NOT NULL
 );
+
+INSERT INTO cheers (type) VALUES ('High Five');
+INSERT INTO cheers (type) VALUES ('Light A Fire');
+INSERT INTO cheers (type) VALUES ('Thanks');

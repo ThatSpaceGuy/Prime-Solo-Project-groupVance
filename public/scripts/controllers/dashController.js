@@ -1,4 +1,5 @@
-myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
+myApp.controller('dashController', ['$scope', '$http','uiGridConstants',
+function($scope, $http,uiGridConstants){
   console.log('Dashboard Controller');
   //// Global variables
   // for testing
@@ -10,17 +11,27 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   $scope.stepDone = false;
   $scope.currentGroup = {data: [{}]};
   $scope.demoGroup = {data: [
-      {'Member': 'Agent1',
-      'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'', 'Fr':'X', 'Sa':'X'},
-      {'Member': 'Agent2',
-      'Su':'X', 'Mo':'X', 'Tu':'X', 'We':'', 'Th':'', 'Fr':'X', 'Sa':'X'},
-      {'Member': 'Agent3',
-      'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':''},
-      {'Member': 'Agent4',
-      'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'', 'Sa':'X'},
-      {'Member': 'Agent5',
-      'Su':'X', 'Mo':'X', 'Tu':'', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':'X'},
+    {'Member': 'Agent1',
+    'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'', 'Fr':'X', 'Sa':'X'},
+    {'Member': 'Agent2',
+    'Su':'X', 'Mo':'X', 'Tu':'X', 'We':'', 'Th':'', 'Fr':'X', 'Sa':'X'},
+    {'Member': 'Agent3',
+    'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':''},
+    {'Member': 'Agent4',
+    'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'', 'Sa':'X'},
+    {'Member': 'Agent5',
+    'Su':'X', 'Mo':'X', 'Tu':'', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':'X'},
   ]};
+
+
+  // Function Delcarations
+  $scope.getTableHeight = function() {
+    var rowHeight = 30; // your row height
+    var headerHeight = 30; // your header height
+    return {
+      height: ($scope.currentGroup.data.length * rowHeight + headerHeight) + "px"
+    };
+  };
 
   $scope.getMember = function(){
     console.log( 'in getMember()' );

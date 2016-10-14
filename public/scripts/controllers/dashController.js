@@ -2,10 +2,12 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   console.log('Dashboard Controller');
   //// Global variables
   // for testing
-  $scope.loggedIn = false; // to be replaced by Auth0 logic
+  $scope.loggedIn = true; // to be replaced by Auth0 logic
+
 
   // initialize values
   $scope.userSteps = 0;
+  $scope.stepDone = false;
   $scope.currentGroup = {data: [{}]};
   $scope.demoGroup = {data: [
       {'Member': 'Agent1',
@@ -24,10 +26,9 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     console.log( 'in getMember()' );
 
     // Logic to find lastDay and last week
-    var currentTime = moment();
-    var lastDay = moment(currentTime).subtract(1, 'days').endOf('day');
-    var lastWeek = lastDay.subtract(6, 'days');
-    console.log('currentTime:',currentTime,'lastDay:',lastDay,'lastWeek:',lastWeek);
+    var lastDay = moment(new Date()).subtract(1, 'days').endOf('day').format();
+    var lastWeek = moment(lastDay).subtract(6, 'days').format();
+    console.log('lastDay:',lastDay,'lastWeek:',lastWeek);
     // assemble objectToSend
     var logInfoToSend = {
       memberValue: 'Lui.Matos@gmail.com'
@@ -53,7 +54,8 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       // if user has ever taken a step
       if (dbUser.step_id){
         // check if last step was taken today
-        if (moment(dbUser.step_created).isAfter(lastDay)) {
+        console.log('lastStep:',dbUser.step_created,'lastDay:',lastDay);
+        if (moment(dbUser.step_created).isAfter(moment(lastDay))) {
           // then a step was taken today
           $scope.stepDone = true;
           // capture id of last step to be able to delete it
@@ -86,7 +88,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         groupData[memberEmail].numSteps++;
 
         // check if step was taken within the past week
-        if (moment(memberStep).isAfter(lastWeek)) {
+        if (moment(memberStep).isAfter(moment(lastWeek))) {
           // if so, then keep track of it for display
           groupData[memberEmail].stepArray.push(memberStep);
         }
@@ -94,7 +96,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
       console.log('groupData:',groupData);
       // Now that the group data is ready, build gridData
       // initialize variables
-      var dayOne = lastWeek.add(1,'days').format('dd');
+      var dayOne = moment(lastWeek).add(1,'days').format('dd');
       var searchDays = [dayOne];
       // build searchDays array
       for (var k = 1; k < 7; k++) {

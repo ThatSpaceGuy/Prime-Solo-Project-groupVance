@@ -5,11 +5,22 @@ function($scope, $http,uiGridConstants){
   // for testing
   $scope.loggedIn = true; // to be replaced by Auth0 logic
 
-
   // initialize values
   $scope.userSteps = 0;
   $scope.stepDone = false;
   $scope.currentGroup = {data: [{}]};
+  // Logic to find lastDay and last week
+  var lastDay = moment(new Date()).subtract(1, 'days').endOf('day').format();
+  var lastWeek = moment(lastDay).subtract(6, 'days').format();
+  console.log('lastDay:',lastDay,'lastWeek:',lastWeek);
+  var dayOne = moment(lastWeek).add(1,'days').format('dd');
+  var searchDays = [dayOne];
+  // build searchDays array
+  for (var k = 1; k < 7; k++) {
+    searchDays[k]=moment(searchDays[k-1],'dd',true).add(1,'days').format('dd');
+  }
+  console.log('searchDays:',searchDays);
+
   $scope.demoGroup = {data: [
     {'Member': 'Agent1',
     'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'', 'Fr':'X', 'Sa':'X'},
@@ -23,7 +34,6 @@ function($scope, $http,uiGridConstants){
     'Su':'X', 'Mo':'X', 'Tu':'', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':'X'},
   ]};
 
-
   // Function Delcarations
   $scope.getTableHeight = function() {
     var rowHeight = 30; // your row height
@@ -36,10 +46,6 @@ function($scope, $http,uiGridConstants){
   $scope.getMember = function(){
     console.log( 'in getMember()' );
 
-    // Logic to find lastDay and last week
-    var lastDay = moment(new Date()).subtract(1, 'days').endOf('day').format();
-    var lastWeek = moment(lastDay).subtract(6, 'days').format();
-    console.log('lastDay:',lastDay,'lastWeek:',lastWeek);
     // assemble objectToSend
     var logInfoToSend = {
       memberValue: 'Lui.Matos@gmail.com'
@@ -107,13 +113,6 @@ function($scope, $http,uiGridConstants){
       console.log('groupData:',groupData);
       // Now that the group data is ready, build gridData
       // initialize variables
-      var dayOne = moment(lastWeek).add(1,'days').format('dd');
-      var searchDays = [dayOne];
-      // build searchDays array
-      for (var k = 1; k < 7; k++) {
-        searchDays[k]=moment(searchDays[k-1],'dd',true).add(1,'days').format('dd');
-      }
-      console.log('searchDays:',searchDays);
       var memberIndex = -1;
       var dayOfStep;
       var stepsToCheck;
@@ -192,6 +191,10 @@ function($scope, $http,uiGridConstants){
         console.log($scope.currentStep);
         // increment the counter accordingly
         $scope.userSteps++;
+        // add the appropriate X to the gridData
+          // [0] is index of currentUser in data
+          // searchDays[6] is current Day's property in the Object
+        $scope.currentGroup.data[0][searchDays[6]]='X';
       }); // end http POST call
       $scope.stepDone = true;
     }
@@ -218,6 +221,10 @@ function($scope, $http,uiGridConstants){
         $scope.currentStep = undefined;
         // decrement the counter accordingly
         $scope.userSteps--;
+        // remove the appropriate X to the gridData
+          // [0] is index of currentUser in data
+          // searchDays[6] is current Day's property in the Object
+        $scope.currentGroup.data[0][searchDays[6]]='';
       }); // end http DELETE call
     }
   };

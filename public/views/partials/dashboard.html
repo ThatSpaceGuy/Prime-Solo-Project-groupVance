@@ -27,6 +27,7 @@
     <div ng-if="loggedIn == false">
       <p>This is the Group Stats Box.</p>
       <p>This is where you would see how well your group is doing in achieving their goals.</p>
+      <div ui-grid="demoGroup" class="groupStatsGrid"></div>
     </div>
     <div ng-if="loggedIn == true">
       <p>You are a member of {{currentUser.group_title}}</p>

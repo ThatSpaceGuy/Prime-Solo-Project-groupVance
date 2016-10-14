@@ -2,11 +2,23 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
   console.log('Dashboard Controller');
   //// Global variables
   // for testing
-  $scope.loggedIn = true; // to be replaced by Auth0 logic
+  $scope.loggedIn = false; // to be replaced by Auth0 logic
 
   // initialize values
   $scope.userSteps = 0;
   $scope.currentGroup = {data: [{}]};
+  $scope.demoGroup = {data: [
+      {'Member': 'Agent1',
+      'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'', 'Fr':'X', 'Sa':'X'},
+      {'Member': 'Agent2',
+      'Su':'X', 'Mo':'X', 'Tu':'X', 'We':'', 'Th':'', 'Fr':'X', 'Sa':'X'},
+      {'Member': 'Agent3',
+      'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':''},
+      {'Member': 'Agent4',
+      'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'', 'Sa':'X'},
+      {'Member': 'Agent5',
+      'Su':'X', 'Mo':'X', 'Tu':'', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':'X'},
+  ]};
 
   $scope.getMember = function(){
     console.log( 'in getMember()' );
@@ -140,7 +152,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
     // get their info
     $scope.getMember();
   } else {
-    // otherwise, call them "Guest"
+    // otherwise, call them 'Guest'
     $scope.currentUser = {pref_name: 'Guest'};
   } // end loggedIn check
 
@@ -185,7 +197,7 @@ myApp.controller('dashController', ['$scope', '$http', function($scope, $http){
         method: 'DELETE',
         url: '/deleteStepDB',
         data: stepIDToSend,
-        headers: {"Content-Type": "application/json;charset=utf-8"}
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
       }).then(function successCallback( response ){
         console.log( 'back from post:', response );
         // reset flags and variables

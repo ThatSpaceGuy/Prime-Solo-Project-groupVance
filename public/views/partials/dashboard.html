@@ -30,8 +30,8 @@
       <div ui-grid="demoGroup" class="groupStatsGrid"></div>
     </div>
     <div ng-if="loggedIn == true">
-      <p>You are a member of {{currentUser.group_title}}</p>
-      <p>Here are the {{currentUser.group_title}} stats for the past week.</p>
+      <p>You are a member of the {{currentUser.group_title}} group</p>
+      <p>Here are the {{currentUser.group_title}} stats for the past week:</p>
       <div ui-if="gridData.data.length>0" ui-grid="currentGroup" class="groupStatsGrid" ui-grid-auto-resize ng-style="getTableHeight()"></div>
     </div>
   </div>

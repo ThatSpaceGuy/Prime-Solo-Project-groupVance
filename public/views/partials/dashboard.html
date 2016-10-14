@@ -8,7 +8,7 @@
   <div id="personalStatsBox">
     <div ng-if="loggedIn == false">
       <p>This is the Personal Stats Box.</p>
-      <p>This is where you would check-in daily on your mission.</p>
+      <p>This is where you check-in daily on your mission.</p>
       <button type="button" id="tourButton">Button to log progress</button>
     </div>
     <div ng-if="loggedIn == true">
@@ -26,7 +26,7 @@
   <div id="groupStatsBox">
     <div ng-if="loggedIn == false">
       <p>This is the Group Stats Box.</p>
-      <p>This is where you would see how well your group is doing in achieving their goals.</p>
+      <p>This is where you see how well your group is doing in achieving their goals.</p>
       <div ui-grid="demoGroup" class="groupStatsGrid"></div>
     </div>
     <div ng-if="loggedIn == true">
@@ -37,7 +37,19 @@
   </div>
   </div>
   <div id="groupMessageBox">
-
+    <div ng-if="loggedIn == false">
+      <p>This is the Group Message Box.</p>
+      <p>This is where you see messages (called "shouts") from your group members.</p>
+      <div></div>
+      <p>You also have the option to send your own shouts to your group members.</p>
+      <div></div>
+    </div>
+    <div ng-if="loggedIn == true">
+      <p>You have received NUMBER of shouts from your group!</p>
+      <div></div>
+      <p>Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
+      <div></div>
+    </div>
   </div>
   <div id="inspirationalBox">
 

@@ -60,7 +60,7 @@ CREATE TABLE zones (
 -- Shouts refer to a message sent to encourage someone
 CREATE TABLE shouts (
 	id SERIAL PRIMARY KEY,
-  delivered BOOLEAN NOT NULL,
+  delivered BOOLEAN NOT NULL DEFAULT false,
 	fan_id INTEGER NOT NULL,
 	runner_id INTEGER NOT NULL,
 	cheer_id INTEGER NOT NULL,

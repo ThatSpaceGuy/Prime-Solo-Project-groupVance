@@ -114,6 +114,7 @@ function($scope, $http,uiGridConstants){
         }
       }
       console.log('groupData:',groupData);
+      $scope.groupInfo = groupData;
       // grab steps of currentUser for personal stats box
       $scope.userSteps = groupData[dbUser.memberHandle].numSteps;
       console.log('num steps:', $scope.userSteps);
@@ -185,9 +186,8 @@ function($scope, $http,uiGridConstants){
             $scope.shoutList[m].Message = 'wants to encourage you!';
             break;
         }
-
-        $scope.shoutList[m].Options = '';
       }
+
 
       console.log('shoutList:', $scope.shoutList);
     }); // end http POST call

@@ -48,13 +48,13 @@
       <p>You have received {{numShouts}} shouts from other {{currentUser.group_title}} members!</p>
       <p ng-repeat = "shout in shoutList">
         {{$index+1}}) {{shout.Member}} {{shout.Message}}
-        <button ng-if="shoutList[$index].Message !== 'Thanks!'" ng-click="thankClick($index)">Say Thanks!</button>
-        <button ng-click="removeClick($index)">Remove From List</button>
+        <button ng-if="shoutList[$index].Message !== 'Thanks!'" ng-click="shoutClick(dbShouts[$index].fan_id,3)">Say Thanks!</button>
+        <button ng-click="removeClick(dbShouts[$index].shout_id)">Remove From List</button>
       </p>
       <p>Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
       <p ng-repeat = "member in groupInfo">
-        <button ng-if="member.member_id !== currentUser.member_id" ng-click="shoutClick(member.member_id,1)">Send {{member.prefName}} a High Five!</button>
-        <button ng-if="member.member_id !== currentUser.member_id" ng-click="shoutClick(member.member_id,2)">Light a fire under {{member.prefName}}!</button>
+        <button ng-if="member.member_id !== currentUser.member_id" ng-if"!cheerSent[member.member_id.toString()][1]" ng-click="shoutClick(member.member_id,1)">Send {{member.prefName}} a High Five!</button>
+        <button ng-if="member.member_id !== currentUser.member_id" ng-if"!cheerSent[member.member_id.toString()][2]" ng-click="shoutClick(member.member_id,2)">Light a fire under {{member.prefName}}!</button>
       </p>
     </div>
   </div>

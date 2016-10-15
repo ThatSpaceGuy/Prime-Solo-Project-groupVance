@@ -8,6 +8,7 @@ function($scope, $http,uiGridConstants){
   // initialize values
   $scope.userSteps = 0;
   $scope.stepDone = false;
+  $scope.cheerSent = {};
   $scope.currentGroup = {data: [{}]};
   $scope.messageList = {data: [{}]};
   // Logic to find lastDay and last week
@@ -35,6 +36,7 @@ function($scope, $http,uiGridConstants){
     'Su':'X', 'Mo':'X', 'Tu':'', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':'X'},
   ]};
 
+
   // Function Delcarations
   $scope.getGroupStatsHeight = function() {
     var rowHeight = 30;
@@ -59,7 +61,6 @@ function($scope, $http,uiGridConstants){
       console.log( 'back from post:', response );
       // store all group and message data
       var dbGroup = response.data[0];
-      var dbShouts = response.data[1];
       // set latest Step information to currentUser
       var dbUser = dbGroup[0];
       $scope.currentUser = dbUser;
@@ -164,18 +165,19 @@ function($scope, $http,uiGridConstants){
       $scope.currentGroup = {data: gridData};
 
       // Populate the Group message box
-      $scope.numShouts = dbShouts.length;
-      console.log('dbShouts:', dbShouts);
+      $scope.dbShouts = response.data[1];
+      $scope.numShouts = $scope.dbShouts.length;
+      console.log('dbShouts:', $scope.dbShouts);
       $scope.shoutList = [];
       for (var m = 0; m < $scope.numShouts; m++) {
         $scope.shoutList[m] = {};
-        var thisPrefName = dbShouts[m].fan_pref_name;
+        var thisPrefName = $scope.dbShouts[m].fan_pref_name;
         if (!thisPrefName){
-          $scope.shoutList[m].Member = dbShouts[m].fan_first_name;
+          $scope.shoutList[m].Member = $scope.dbShouts[m].fan_first_name;
         } else {
           $scope.shoutList[m].Member = thisPrefName;
         }
-        switch (dbShouts[m].cheer_type){
+        switch ($scope.dbShouts[m].cheer_type){
           case 'High Five':
             $scope.shoutList[m].Message = 'gave you a High Five!';
             break;
@@ -202,8 +204,24 @@ function($scope, $http,uiGridConstants){
     $scope.currentUser = {pref_name: 'Guest'};
   } // end loggedIn check
 
-  $scope.thankClick = function(){};
-  $scope.removeClick = function(){};
+  $scope.shoutClick = function(memberID, cheer){
+    var shoutInfoToSend ={
+      // get the memberID, and send it
+      memberID: memberID,
+      cheerType: cheer
+    }; //end object to send
+    console.log('stepInfoToSend: ',shoutInfoToSend);
+    $http({
+      method: 'POST',
+      url: '/postShoutDB',
+      data: stepInfoToSend
+    }).then(function successCallback( response ){
+      $scope.cheerSent[memberID.toString()][cheer]=true;
+    }); // end http POST call
+  };
+  $scope.removeClick = function(shoutID){
+
+  };
 
   //// Prayer Stats Box Code
   $scope.takeStep = function(){

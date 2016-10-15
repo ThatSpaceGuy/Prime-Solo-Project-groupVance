@@ -9,6 +9,7 @@ function($scope, $http,uiGridConstants){
   $scope.userSteps = 0;
   $scope.stepDone = false;
   $scope.currentGroup = {data: [{}]};
+  $scope.messageList = {data: [{}]};
   // Logic to find lastDay and last week
   var lastDay = moment(new Date()).subtract(1, 'days').endOf('day').format();
   var lastWeek = moment(lastDay).subtract(6, 'days').format();
@@ -35,9 +36,9 @@ function($scope, $http,uiGridConstants){
   ]};
 
   // Function Delcarations
-  $scope.getTableHeight = function() {
-    var rowHeight = 30; // your row height
-    var headerHeight = 30; // your header height
+  $scope.getGroupStatsHeight = function() {
+    var rowHeight = 30;
+    var headerHeight = 30;
     return {
       height: ($scope.currentGroup.data.length * rowHeight + headerHeight) + "px"
     };
@@ -56,8 +57,9 @@ function($scope, $http,uiGridConstants){
       data: logInfoToSend
     }).then(function successCallback( response ){
       console.log( 'back from post:', response );
-      // store all group data
+      // store all group and message data
       var dbGroup = response.data[0];
+      var dbShouts = response.data[1];
       // set latest Step information to currentUser
       var dbUser = dbGroup[0];
       $scope.currentUser = dbUser;
@@ -159,9 +161,37 @@ function($scope, $http,uiGridConstants){
       console.log(gridData);
       // assign the gridData to be displayed by ui-grid
       $scope.currentGroup = {data: gridData};
+
+      // Populate the Group message box
+      $scope.numShouts = dbShouts.length;
+      console.log('dbShouts:', dbShouts);
+      $scope.shoutList = [];
+      for (var m = 0; m < $scope.numShouts; m++) {
+        $scope.shoutList[m] = {};
+        var thisPrefName = dbShouts[m].fan_pref_name;
+        if (!thisPrefName){
+          $scope.shoutList[m].Member = dbShouts[m].fan_first_name;
+        } else {
+          $scope.shoutList[m].Member = thisPrefName;
+        }
+        switch (dbShouts[m].cheer_type){
+          case 'High Five':
+            $scope.shoutList[m].Message = 'gave you a High Five!';
+            break;
+          case 'Light A Fire':
+            $scope.shoutList[m].Message = 'is lighting a fire under you!';
+            break;
+          default:
+            $scope.shoutList[m].Message = 'wants to encourage you!';
+            break;
+        }
+
+        $scope.shoutList[m].Options = '';
+      }
+
+      console.log('shoutList:', $scope.shoutList);
     }); // end http POST call
   }; // end getMember
-
 
   // if a Member is loggedIn
   if ($scope.loggedIn){
@@ -171,6 +201,9 @@ function($scope, $http,uiGridConstants){
     // otherwise, call them 'Guest'
     $scope.currentUser = {pref_name: 'Guest'};
   } // end loggedIn check
+
+  $scope.thankClick = function(){};
+  $scope.removeClick = function(){};
 
   //// Prayer Stats Box Code
   $scope.takeStep = function(){
@@ -196,8 +229,8 @@ function($scope, $http,uiGridConstants){
         // increment the counter accordingly
         $scope.userSteps++;
         // add the appropriate X to the gridData
-          // [$scope.currentUser.memberIndex] is index of currentUser in data
-          // searchDays[6] is current Day's property in the Object
+        // [$scope.currentUser.memberIndex] is index of currentUser in data
+        // searchDays[6] is current Day's property in the Object
         $scope.currentGroup.data[$scope.currentUser.memberIndex][searchDays[6]]='X';
         $scope.stepDone = true;
       }); // end http POST call
@@ -226,8 +259,8 @@ function($scope, $http,uiGridConstants){
         // decrement the counter accordingly
         $scope.userSteps--;
         // remove the appropriate X to the gridData
-          // [$scope.currentUser.memberIndex] is index of currentUser in data
-          // searchDays[6] is current Day's property in the Object
+        // [$scope.currentUser.memberIndex] is index of currentUser in data
+        // searchDays[6] is current Day's property in the Object
         $scope.currentGroup.data[$scope.currentUser.memberIndex][searchDays[6]]='';
       }); // end http DELETE call
     }

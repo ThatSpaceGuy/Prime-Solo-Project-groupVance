@@ -32,7 +32,7 @@
     <div ng-if="loggedIn == true">
       <p>You are a member of the {{currentUser.group_title}} group</p>
       <p>Here are the {{currentUser.group_title}} stats for the past week:</p>
-      <div ui-if="gridData.data.length>0" ui-grid="currentGroup" class="groupStatsGrid" ui-grid-auto-resize ng-style="getTableHeight()"></div>
+      <div ui-if="gridData.data.length>0" ui-grid="currentGroup" class="grid" ui-grid-auto-resize ng-style="getGroupStatsHeight()"></div>
     </div>
   </div>
   </div>
@@ -45,8 +45,14 @@
       <div></div>
     </div>
     <div ng-if="loggedIn == true">
-      <p>You have received NUMBER of shouts from your group!</p>
-      <div></div>
+      <p>You have received {{numShouts}} shouts from your group!</p>
+          <p ng-repeat = 'shout in shoutList'>
+            {{$index+1}}) {{shout.Member}} {{shout.Message}} 
+            <button ng-if="shoutList[$index].Message !== 'Thanks!'" ng-click="thankClick($index)">Say Thanks!</button>
+            <button ng-click="removeClick($index)">Remove From List</button>
+          </p>
+        </tbody>
+      </table>
       <p>Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
       <div></div>
     </div>

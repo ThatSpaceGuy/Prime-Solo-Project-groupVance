@@ -173,23 +173,22 @@ function($scope, $http,uiGridConstants){
         $scope.shoutList[m] = {};
         var thisPrefName = $scope.dbShouts[m].fan_pref_name;
         if (!thisPrefName){
-          $scope.shoutList[m].Member = $scope.dbShouts[m].fan_first_name;
+          $scope.shoutList[m].member = $scope.dbShouts[m].fan_first_name;
         } else {
-          $scope.shoutList[m].Member = thisPrefName;
+          $scope.shoutList[m].member = thisPrefName;
         }
         switch ($scope.dbShouts[m].cheer_type){
           case 'High Five':
-            $scope.shoutList[m].Message = 'gave you a High Five!';
+            $scope.shoutList[m].message = 'gave you a High Five!';
             break;
           case 'Light A Fire':
-            $scope.shoutList[m].Message = 'is lighting a fire under you!';
+            $scope.shoutList[m].message = 'is lighting a fire under you!';
             break;
           default:
-            $scope.shoutList[m].Message = 'wants to encourage you!';
+            $scope.shoutList[m].message = 'wants to encourage you!';
             break;
         }
       }
-
 
       console.log('shoutList:', $scope.shoutList);
     }); // end http POST call
@@ -204,24 +203,59 @@ function($scope, $http,uiGridConstants){
     $scope.currentUser = {pref_name: 'Guest'};
   } // end loggedIn check
 
-  $scope.shoutClick = function(memberID, cheer){
-    var shoutInfoToSend ={
+  $scope.thankClick = function(shoutIndex, toName, thisShout, toID){
+    var thankInfoToSend ={
       // get the memberID, and send it
-      memberID: memberID,
+      runnerID: toID,
+      fanID: $scope.currentUser.member_id,
+      shoutID: thisShout
+    }; //end object to send
+    console.log('thankInfoToSend: ',thankInfoToSend);
+    $http({
+      method: 'POST',
+      url: '/postThanksDB',
+      data: thankInfoToSend
+    }).then(function successCallback( response ){
+      $scope.shoutList.splice(shoutIndex, 1);
+      $scope.dbShouts.splice(shoutIndex, 1);
+      alert(toName+' has been thanked!');
+      $scope.numShouts--;
+    }); // end http POST call
+  }; // end thankClick
+
+  $scope.shoutClick = function(toID, cheer){
+    var shoutInfoToSend ={
+      // get the info, organize it, and send it
+      runnerID: toID,
+      fanID: $scope.currentUser.member_id,
       cheerType: cheer
     }; //end object to send
-    console.log('stepInfoToSend: ',shoutInfoToSend);
+    console.log('shoutInfoToSend: ',shoutInfoToSend);
     $http({
       method: 'POST',
       url: '/postShoutDB',
-      data: stepInfoToSend
+      data: shoutInfoToSend
     }).then(function successCallback( response ){
       $scope.cheerSent[memberID.toString()][cheer]=true;
     }); // end http POST call
-  };
-  $scope.removeClick = function(shoutID){
+  }; // end shoutClick
 
-  };
+  $scope.heardClick = function(shoutIndex, thisShout){
+    var heardInfoToSend ={
+      // get the shout ID and send it
+      shoutID: thisShout
+    }; //end object to send
+    console.log('heardInfoToSend: ',heardInfoToSend);
+    $http({
+      method: 'PUT',
+      url: '/putHeardDB',
+      data: heardInfoToSend
+    }).then(function successCallback( response ){
+      $scope.shoutList.splice(shoutIndex, 1);
+      $scope.dbShouts.splice(shoutIndex, 1);
+      $scope.numShouts--;
+    }); // end http POST call
+  }; // end heardClick
 
   //// Prayer Stats Box Code
   $scope.takeStep = function(){
@@ -283,4 +317,4 @@ function($scope, $http,uiGridConstants){
       }); // end http DELETE call
     }
   };
-}]);
+}]); // end dashController

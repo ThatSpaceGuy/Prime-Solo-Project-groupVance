@@ -45,11 +45,16 @@
       <div></div>
     </div>
     <div ng-if="loggedIn == true">
-      <p>You have received {{numShouts}} shouts from other {{currentUser.group_title}} members!</p>
+      <p>
+        You have <span ng-if="numShouts === 0">no</span><span ng-if="numShouts !== 0">{{numShouts}}</span>
+        shout<span ng-if="numShouts !== 1">s</span> from other
+        {{currentUser.group_title}} members waiting to be heard
+        <span ng-if="numShouts === 0">.</span><span ng-if="numShouts !== 0">!</span>
+      </p>
       <p ng-repeat = "shout in shoutList">
-        {{$index+1}}) {{shout.Member}} {{shout.Message}}
-        <button ng-if="shoutList[$index].Message !== 'Thanks!'" ng-click="shoutClick(dbShouts[$index].fan_id,3)">Say Thanks!</button>
-        <button ng-click="removeClick(dbShouts[$index].shout_id)">Remove From List</button>
+        {{$index+1}}) {{shout.member}} {{shout.message}}
+        <button ng-if="shoutList[$index].message !== 'Thanks!'" ng-click="thankClick($index, shout.member, dbShouts[$index].shout_id, dbShouts[$index].fan_id)">Say Thanks!</button>
+        <button ng-click="heardClick($index, dbShouts[$index].shout_id)">Mark as heard</button>
       </p>
       <p>Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
       <p ng-repeat = "member in groupInfo">

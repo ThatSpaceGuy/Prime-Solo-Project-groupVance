@@ -30,43 +30,55 @@
         <div ui-grid="demoGroup" class="groupStatsGrid"></div>
       </div>
       <div ng-if="loggedIn == true">
-        <p>You are a member of the {{currentUser.group_title}} group</p>
-        <p>Here are the {{currentUser.group_title}} stats for the past week:</p>
-        <div ui-if="gridData.data.length>0" ui-grid="currentGroup" class="grid" ui-grid-auto-resize ng-style="getGroupStatsHeight()"></div>
+        <p ng-if="currentUser.group_title !== 'None'">You are a member of the {{currentUser.group_title}} group.</p>
+        <p>Here are <span ng-if="currentUser.group_title !== 'None'">the {{currentUser.group_title}}</span>
+          <span ng-if="currentUser.group_title === 'None'">your</span> stats for the past week:</p>
+          <div ui-if="gridData.data.length>0" ui-grid="currentGroup" class="grid" ui-grid-auto-resize ng-style="getGroupStatsHeight()"></div>
+        </div>
+      </div>
+      <div id="groupMessageBox">
+        <div ng-if="loggedIn == false">
+          <p>This is the Group Message Box.</p>
+          <p>This is where you see messages (called "shouts") from your group members.</p>
+          <div></div>
+          <p>You also have the option to send your own shouts to your group members.</p>
+          <div></div>
+        </div>
+        <div ng-if="loggedIn == true">
+          <div ng-if="currentUser.group_title !== 'None'">
+            <p>
+              You have <span ng-if="numShouts === 0">no</span><span ng-if="numShouts !== 0">{{numShouts}}</span>
+              shout<span ng-if="numShouts !== 1">s</span> from other
+              {{currentUser.group_title}} members waiting to be
+              heard<span ng-if="numShouts === 0">.</span><span ng-if="numShouts !== 0">!</span>
+            </p>
+            <p ng-repeat = "shout in shoutList">
+              {{$index+1}}) {{shout.member}} {{shout.message}}
+              <button ng-if="shoutList[$index].message !== 'thanked you for your shout!'" ng-click="thankClick($index, shout.member, dbShouts[$index].shout_id, dbShouts[$index].fan_id)">Say Thanks!</button>
+              <button ng-click="heardClick($index, dbShouts[$index].shout_id)">Mark as heard</button>
+            </p>
+            <p ng-if="cheerSent.total < (groupSize-1)*numCheers">Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
+            <p ng-if="cheerSent.total >= (groupSize-1)*numCheers">There are currently no shouts available to send to your group. Check back tomorrow!</p>
+            <p ng-repeat = "member in groupInfo">
+              <button ng-if="member.member_id !== currentUser.member_id && !cheerSent[member.member_id.toString()]['High Five']"
+                  ng-click="shoutClick(member.member_id,1)">Send {{member.prefName}} a High Five!</button>
+              <button ng-if="member.member_id !== currentUser.member_id && !cheerSent[member.member_id.toString()]['Light A Fire']"
+                  ng-click="shoutClick(member.member_id,2)">Light a fire under {{member.prefName}}!</button>
+            </p>
+          </div>
+          <div ng-if="currentUser.group_title === 'None'">
+            <p>You are not yet a member of a group!</p>
+            <p>If you would like to join a group please choose from the list below:</p>
+            <div ng-repeat = "group in openGroups">
+              <p>Group Title: {{group.title}} -  Current # of members: {{group.numMembers}} - <button ng-click="joinClick(group.title, 1)">Join the {{group.title}} group!</button></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="inspirationalBox">
+
+      </div>
+      <div id="resourcesBox">
+
       </div>
     </div>
-  </div>
-  <div id="groupMessageBox">
-    <div ng-if="loggedIn == false">
-      <p>This is the Group Message Box.</p>
-      <p>This is where you see messages (called "shouts") from your group members.</p>
-      <div></div>
-      <p>You also have the option to send your own shouts to your group members.</p>
-      <div></div>
-    </div>
-    <div ng-if="loggedIn == true">
-      <p>
-        You have <span ng-if="numShouts === 0">no</span><span ng-if="numShouts !== 0">{{numShouts}}</span>
-        shout<span ng-if="numShouts !== 1">s</span> from other
-        {{currentUser.group_title}} members waiting to be heard
-        <span ng-if="numShouts === 0">.</span><span ng-if="numShouts !== 0">!</span>
-      </p>
-      <p ng-repeat = "shout in shoutList">
-        {{$index+1}}) {{shout.member}} {{shout.message}}
-        <button ng-if="shoutList[$index].message !== 'Thanks!'" ng-click="thankClick($index, shout.member, dbShouts[$index].shout_id, dbShouts[$index].fan_id)">Say Thanks!</button>
-        <button ng-click="heardClick($index, dbShouts[$index].shout_id)">Mark as heard</button>
-      </p>
-      <p>Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
-      <p ng-repeat = "member in groupInfo">
-        <button ng-if="member.member_id !== currentUser.member_id" ng-if"!cheerSent[member.member_id.toString()][1]" ng-click="shoutClick(member.member_id,1)">Send {{member.prefName}} a High Five!</button>
-        <button ng-if="member.member_id !== currentUser.member_id" ng-if"!cheerSent[member.member_id.toString()][2]" ng-click="shoutClick(member.member_id,2)">Light a fire under {{member.prefName}}!</button>
-      </p>
-    </div>
-  </div>
-  <div id="inspirationalBox">
-
-  </div>
-  <div id="resourcesBox">
-
-  </div>
-</div>

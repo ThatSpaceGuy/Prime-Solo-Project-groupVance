@@ -1,5 +1,5 @@
-myApp.controller('dashController', ['$scope', '$http','uiGridConstants',
-function($scope, $http,uiGridConstants){
+myApp.controller('dashController', ['$scope', '$http', '$window','uiGridConstants',
+function($scope, $http, $window, uiGridConstants){
   console.log('Dashboard Controller');
   //// Global variables
   // for testing
@@ -8,11 +8,15 @@ function($scope, $http,uiGridConstants){
   // initialize values
   $scope.userSteps = 0;
   $scope.stepDone = false;
-  $scope.cheerSent = {};
+  $scope.cheerSent = {total: 0};
   $scope.currentGroup = {data: [{}]};
   $scope.messageList = {data: [{}]};
+  $scope.openGroups = {};
+  $scope.groupSize = 0;
+  $scope.numCheers = 2; // should ideally be set from the database
   // Logic to find lastDay and last week
-  var lastDay = moment(new Date()).subtract(1, 'days').endOf('day').format();
+  var userNow = moment(new Date()).format();
+  var lastDay = moment(userNow).subtract(1, 'days').endOf('day').format();
   var lastWeek = moment(lastDay).subtract(6, 'days').format();
   console.log('lastDay:',lastDay,'lastWeek:',lastWeek);
   var dayOne = moment(lastWeek).add(1,'days').format('dd');
@@ -51,7 +55,7 @@ function($scope, $http,uiGridConstants){
 
     // assemble objectToSend
     var logInfoToSend = {
-      memberValue: 'Lui.Matos@gmail.com'
+      memberValue: 'Listettson@gmail.com'
     }; //end object to send
     $http({
       method: 'POST',
@@ -64,11 +68,6 @@ function($scope, $http,uiGridConstants){
       // set latest Step information to currentUser
       var dbUser = dbGroup[0];
       $scope.currentUser = dbUser;
-      // check to see if a preferred name exists
-      if (!dbUser.pref_name){
-        // if not, set it equal to first_name
-        $scope.currentUser.pref_name = dbUser.first_name;
-      }
       $scope.currentUser.memberHandle = $scope.currentUser.pref_name + dbUser.member_id;
       console.log('currentUser:',$scope.currentUser);
       //// Set initial step info for user
@@ -92,9 +91,6 @@ function($scope, $http,uiGridConstants){
         // Grabbing info for DRYness
         memberStep = dbGroup[j].step_created;
         memberName = dbGroup[j].pref_name;
-        if (!memberName){
-          memberName = dbGroup[j].first_name;
-        }
         memberHandle = memberName+dbGroup[j].member_id;
         console.log('memberHandle:',memberHandle);
         if (!groupData[memberHandle]){
@@ -104,9 +100,12 @@ function($scope, $http,uiGridConstants){
           groupData[memberHandle].numSteps = 0;
           groupData[memberHandle].stepArray = [];
           groupData[memberHandle].member_id = dbGroup[j].member_id;
+          $scope.groupSize++;
         }
         // count this step
-        groupData[memberHandle].numSteps++;
+        if(memberStep){
+          groupData[memberHandle].numSteps++;
+        }
 
         // check if step was taken within the past week
         if (moment(memberStep).isAfter(moment(lastWeek))) {
@@ -114,7 +113,7 @@ function($scope, $http,uiGridConstants){
           groupData[memberHandle].stepArray.push(memberStep);
         }
       }
-      console.log('groupData:',groupData);
+      console.log('groupData:',groupData, 'length:', groupData.length);
       $scope.groupInfo = groupData;
       // grab steps of currentUser for personal stats box
       $scope.userSteps = groupData[dbUser.memberHandle].numSteps;
@@ -166,31 +165,56 @@ function($scope, $http,uiGridConstants){
 
       // Populate the Group message box
       $scope.dbShouts = response.data[1];
-      $scope.numShouts = $scope.dbShouts.length;
       console.log('dbShouts:', $scope.dbShouts);
       $scope.shoutList = [];
-      for (var m = 0; m < $scope.numShouts; m++) {
-        $scope.shoutList[m] = {};
-        var thisPrefName = $scope.dbShouts[m].fan_pref_name;
-        if (!thisPrefName){
-          $scope.shoutList[m].member = $scope.dbShouts[m].fan_first_name;
+      var thisShout;
+      $scope.numShouts = 0;
+      var listIndex;
+      for (var m = 0; m < $scope.dbShouts.length; m++) {
+        thisShout = $scope.dbShouts[m];
+        console.log('thisShout:', thisShout);
+        // if the shouter is the same as the currentUser
+        console.log('fan_id:', thisShout.fan_id, 'user_id:', $scope.currentUser.member_id);
+        if (thisShout.fan_id == $scope.currentUser.member_id){
+          // then if thisShout was send today and it's not a 'Thanks!'
+          if (moment(lastDay).isBefore(moment(thisShout.shout_created)) && thisShout.cheer_type !== 'Thanks') {
+            // mark this cheer as already sent so that it does not show up as an option today
+            if (!$scope.cheerSent[thisShout.runner_id.toString()]){
+              $scope.cheerSent[thisShout.runner_id.toString()]={};
+            }
+            $scope.cheerSent[thisShout.runner_id.toString()][thisShout.cheer_type] = true;
+            $scope.cheerSent.total++;
+          }
+          console.log('cheerSent:', $scope.cheerSent);
         } else {
-          $scope.shoutList[m].member = thisPrefName;
-        }
-        switch ($scope.dbShouts[m].cheer_type){
-          case 'High Five':
-            $scope.shoutList[m].message = 'gave you a High Five!';
+          $scope.numShouts++;
+          listIndex = $scope.numShouts-1; // set the correct index
+          $scope.shoutList[listIndex] = {};
+          $scope.shoutList[listIndex].member = thisShout.fan_pref_name;
+
+          switch (thisShout.cheer_type){
+            case 'High Five':
+            $scope.shoutList[listIndex].message = 'gave you a High Five!';
             break;
-          case 'Light A Fire':
-            $scope.shoutList[m].message = 'is lighting a fire under you!';
+            case 'Light A Fire':
+            $scope.shoutList[listIndex].message = 'is lighting a fire under you!';
             break;
-          default:
-            $scope.shoutList[m].message = 'wants to encourage you!';
+            case 'Thanks':
+            $scope.shoutList[listIndex].message = 'thanked you for your shout!';
             break;
+            default:
+            $scope.shoutList[listIndex].message = 'wants to encourage you!';
+            break;
+          } // end switch
         }
       }
-
       console.log('shoutList:', $scope.shoutList);
+
+      //if necessary, compile the openGroups information
+      if ($scope.currentUser.group_title === 'None'){
+        $scope.openGroups = response.data[2];
+        console.log('openGroups:',$scope.openGroups);
+      }
     }); // end http POST call
   }; // end getMember
 
@@ -205,7 +229,7 @@ function($scope, $http,uiGridConstants){
 
   $scope.thankClick = function(shoutIndex, toName, thisShout, toID){
     var thankInfoToSend ={
-      // get the memberID, and send it
+      // organize the info, and send it
       runnerID: toID,
       fanID: $scope.currentUser.member_id,
       shoutID: thisShout
@@ -223,6 +247,30 @@ function($scope, $http,uiGridConstants){
     }); // end http POST call
   }; // end thankClick
 
+  $scope.joinClick = function(groupToJoin, userAction){
+    if ($window.confirm('Please confirm you want to join the '+groupToJoin+' group.')) {
+      var joinInfoToSend ={
+        // organize this info, and send it
+        groupTitle: groupToJoin,
+        memberID: $scope.currentUser.member_id,
+        actionID: userAction
+      }; //end object to send
+      console.log('joinInfoToSend: ',joinInfoToSend);
+      $http({
+        method: 'POST',
+        url: '/postJoinDB',
+        data: joinInfoToSend
+      }).then(function successCallback( response ){
+        alert('You successfully joined the '+groupToJoin+' group!');
+        // re-load page info
+        $scope.getMember();
+
+      }); // end http POST call
+    } else {
+      alert('Join request cancelled.');
+    }
+  }; // end joinClick
+
   $scope.shoutClick = function(toID, cheer){
     var shoutInfoToSend ={
       // get the info, organize it, and send it
@@ -236,7 +284,25 @@ function($scope, $http,uiGridConstants){
       url: '/postShoutDB',
       data: shoutInfoToSend
     }).then(function successCallback( response ){
-      $scope.cheerSent[memberID.toString()][cheer]=true;
+      var cheerText;
+      console.log(cheer);
+      switch (cheer) {
+        case 1:
+        cheerText = 'High Five';
+        break;
+        case 2:
+        cheerText = 'Light A Fire';
+        break;
+        default:
+        console.log('Error in switch!');
+        break;
+      }
+      if (!$scope.cheerSent[toID.toString()]){
+        $scope.cheerSent[toID.toString()]={};
+      }
+      $scope.cheerSent[toID.toString()][cheerText]=true;
+      $scope.cheerSent.total++;
+      console.log('cheerSent['+toID.toString()+']['+cheerText+']:',$scope.cheerSent[toID.toString()][cheerText]);
     }); // end http POST call
   }; // end shoutClick
 

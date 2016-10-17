@@ -21,7 +21,7 @@ myApp.controller( 'navController', [ '$scope','$location', function( $scope, $lo
 
   // log out url, from Auth0
   // $scope.logOutUrl = 'https://thatspaceguy.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A3000/dashboard';
-  $scope.logOutUrl = 'https://accounts.google.com/logout?&continue=http://localhost:3000/';
+  $scope.logOutUrl = 'https://accounts.google.com/logout?&continue=https://tranquil-hamlet-55100.herokuapp.com/';
 
   $scope.logIn = function(){
     // call out logIn function from auth0.js

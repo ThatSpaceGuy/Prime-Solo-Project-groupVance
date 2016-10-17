@@ -8,7 +8,7 @@ var moment = require('moment');
 var connectionString = '';
 
 if(process.env.DATABASE_URL !== undefined) {
-    console.log('env connection string');
+    console.log('env connection string:', process.env.DATABASE_URL);
     connectionString = process.env.DATABASE_URL;
     pg.defaults.ssl = true;
   } else {

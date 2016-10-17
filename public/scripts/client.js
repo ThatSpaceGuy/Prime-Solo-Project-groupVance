@@ -40,22 +40,25 @@ myApp.controller( 'navController', [ '$scope','$location', function( $scope, $lo
   $scope.logOut = function(path){
     localStorage.removeItem( 'userProfile' );
     localStorage.removeItem( 'userToken' );
-    $location.path( 'https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:3030/'+path );
+    // $location.path( 'https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:3030/'+path );
+    $location.path('/'+path);
     $scope.loggedIn = false;
     $scope.currentUser = {pref_name: 'Guest'};
     console.log( 'loggedOut:', $scope.userProfile, $scope.currentUser );
   };
 
-  if( JSON.parse( localStorage.getItem( 'userProfile' ) ) ){
-    // if so, save userProfile as $scope.userProfile
-    $scope.userProfile = JSON.parse( localStorage.getItem( 'userProfile' ) );
-    console.log( 'loggedIn:', $scope.userProfile );
-    $scope.loggedIn = true;
-  }
-  else{
-    // if not, make sure we are logged out and empty
-    $scope.logOut($scope.currentView);
-  }
+  $scope.logInCheck = function(){
+    if( JSON.parse( localStorage.getItem( 'userProfile' ) ) ){
+      // if so, save userProfile as $scope.userProfile
+      $scope.userProfile = JSON.parse( localStorage.getItem( 'userProfile' ) );
+      console.log( 'loggedIn:', $scope.userProfile );
+      $scope.loggedIn = true;
+    }
+    else{
+      // if not, make sure we are logged out and empty
+      $scope.logOut($scope.currentView);
+    }
+  };
 }]); // end navController
 
 // Angular Routing Set-up

@@ -27,15 +27,15 @@ function($scope, $http, $window, uiGridConstants){
   console.log('searchDays:',searchDays);
 
   $scope.demoGroup = {data: [
-    {'Member': 'Agent1',
+    {'Member': 'Member1',
     'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'', 'Fr':'X', 'Sa':'X'},
-    {'Member': 'Agent2',
+    {'Member': 'Member2',
     'Su':'X', 'Mo':'X', 'Tu':'X', 'We':'', 'Th':'', 'Fr':'X', 'Sa':'X'},
-    {'Member': 'Agent3',
+    {'Member': 'Member3',
     'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':''},
-    {'Member': 'Agent4',
+    {'Member': 'Member4',
     'Su':'X', 'Mo':'', 'Tu':'X', 'We':'X', 'Th':'X', 'Fr':'', 'Sa':'X'},
-    {'Member': 'Agent5',
+    {'Member': 'Member5',
     'Su':'X', 'Mo':'X', 'Tu':'', 'We':'X', 'Th':'X', 'Fr':'X', 'Sa':'X'},
   ]};
 
@@ -387,16 +387,18 @@ function($scope, $http, $window, uiGridConstants){
   };
 
   //// LoggedIn check
-  if( JSON.parse( localStorage.getItem( 'userProfile' ) ) ){
-    // if so, save userProfile as $scope.userProfile
-    $scope.userProfile = JSON.parse( localStorage.getItem( 'userProfile' ) );
-    console.log( 'loggedIn:', $scope.userProfile );
-    $scope.loggedIn = true;
-    // if a Member is loggedIn get their info
-    $scope.getMember();
-  }
-  else{
-    // if not, make sure we are logged out and empty
-    $scope.logOut('dashboard');
-  }
+  $scope.logCheckDash = function(){
+    if( JSON.parse( localStorage.getItem( 'userProfile' ) ) ){
+      // if so, save userProfile as $scope.userProfile
+      $scope.userProfile = JSON.parse( localStorage.getItem( 'userProfile' ) );
+      console.log( 'loggedIn:', $scope.userProfile );
+      $scope.loggedIn = true;
+      // if a Member is loggedIn get their info
+      $scope.getMember();
+    }
+    else{
+      // if not, make sure we are logged out and empty
+      $scope.logOut('dashboard');
+    }
+  };
 }]); // end dashController

@@ -19,21 +19,22 @@
 	<base href="/"> <!-- Coupled with html5Mode, this makes pretty URLs -->
 </head>
 <body>
-	<h1>groupVance</h1>
-	<h2>Advancing together one step each day!</h2>
-	<div ng-controller="navController">
-		<p>
-			<span ng-repeat="link in linkList">
-				<a ng-href={{link.route}}>{{link.text}}</a>
-			</span>
-			<a ng-href="/{{currentView}}" ng-click="logIn()" ng-if="loggedIn === false">Log In</a>
-			<a ng-href="{{logOutUrl}}" ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
-		</p>
-
-
-		<main ng-view autoscroll="true">
+	<div ng-controller="navController" class="container">
+		<div id="navBar">
+			<h1>groupVance</h1>
+			<h6>Advancing together one step each day!</h6>
+			<p id="navLinks">
+				<span ng-repeat="link in linkList">
+					<a ng-href={{link.route}}>{{link.text}}</a>
+				</span>
+				<a ng-href="/{{currentView}}" ng-click="logIn()" ng-if="loggedIn === false">Log In</a>
+				<a ng-href="{{logOutUrl}}" ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
+			</p>
+		</div>
+		<main ng-view autoscroll="true" ng-init="logInCheck()">
 			<!-- NG-routing shows up here -->
 		</main>
 	</div>
+
 </body>
 </html>

@@ -5,7 +5,15 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var pg = require('pg');
 var moment = require('moment');
-var connectionString = 'postgress://localhost:5432/TotalMercyDB';
+var connectionString = '';
+
+if(process.env.DATABASE_URL !== undefined) {
+    console.log('env connection string');
+    connectionString = process.env.DATABASE_URL;
+    pg.defaults.ssl = true;
+  } else {
+  connectionString ='postgress://localhost:5432/TotalMercyDB';
+}
 
 app.use(bodyParser.urlencoded( {extended: false } ));
 app.use(bodyParser.json());

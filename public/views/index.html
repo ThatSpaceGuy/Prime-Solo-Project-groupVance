@@ -23,10 +23,10 @@
 	<div ng-controller="navController">
 		<p>
 			<span ng-repeat="link in linkList">
-				<a href={{link.route}}>{{link.text}}</a>
+				<a ng-href={{link.route}}>{{link.text}}</a>
 			</span>
-			<a ng-click="logIn()" ng-if="loggedIn === false">Log In</a>
-			<a href=logOutUrl ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
+			<a ng-href="/{{currentView}}" ng-click="logIn()" ng-if="loggedIn === false">Log In</a>
+			<a ng-href="{{logOutUrl}}{{currentView}}" ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
 		</p>
 
 

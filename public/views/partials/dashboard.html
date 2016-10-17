@@ -57,6 +57,7 @@
               <button ng-if="shoutList[$index].message !== 'thanked you for your shout!'" ng-click="thankClick($index, shout.member, dbShouts[$index].shout_id, dbShouts[$index].fan_id)">Say Thanks!</button>
               <button ng-click="heardClick($index, dbShouts[$index].shout_id)">Mark as heard</button>
             </p>
+            <p>{{shoutConfirm}}</p>
             <p ng-if="cheerSent.total < (groupSize-1)*numCheers">Here are the shouts you can send to your fellow {{currentUser.group_title}} members:</p>
             <p ng-if="cheerSent.total >= (groupSize-1)*numCheers">There are currently no shouts available to send to your group. Check back tomorrow!</p>
             <p ng-repeat = "member in groupInfo">

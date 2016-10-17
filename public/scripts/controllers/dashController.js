@@ -1,6 +1,7 @@
 myApp.controller('dashController', ['$scope', '$http', '$window','uiGridConstants',
 function($scope, $http, $window, uiGridConstants){
   console.log('Dashboard Controller');
+  $scope.currentView = 'dashboard';
 
   // initialize values
   $scope.userSteps = 0;
@@ -8,6 +9,7 @@ function($scope, $http, $window, uiGridConstants){
   $scope.cheerSent = {total: 0};
   $scope.currentGroup = {data: [{}]};
   $scope.messageList = {data: [{}]};
+  $scope.shoutConfirm = '';
   $scope.openGroups = {};
   $scope.groupSize = 0;
   $scope.numCheers = 2; // should ideally be set from the database
@@ -226,9 +228,6 @@ function($scope, $http, $window, uiGridConstants){
   }; // end getMember
 
 
-
-
-
   $scope.thankClick = function(shoutIndex, toName, thisShout, toID){
     var thankInfoToSend ={
       // organize the info, and send it
@@ -244,7 +243,7 @@ function($scope, $http, $window, uiGridConstants){
     }).then(function successCallback( response ){
       $scope.shoutList.splice(shoutIndex, 1);
       $scope.dbShouts.splice(shoutIndex, 1);
-      alert(toName+' has been thanked!');
+      $scope.shoutConfirm = toName+' has been thanked!';
       $scope.numShouts--;
     }); // end http POST call
   }; // end thankClick
@@ -304,6 +303,7 @@ function($scope, $http, $window, uiGridConstants){
       }
       $scope.cheerSent[toID.toString()][cheerText]=true;
       $scope.cheerSent.total++;
+
       console.log('cheerSent['+toID.toString()+']['+cheerText+']:',$scope.cheerSent[toID.toString()][cheerText]);
     }); // end http POST call
   }; // end shoutClick
@@ -397,6 +397,6 @@ function($scope, $http, $window, uiGridConstants){
   }
   else{
     // if not, make sure we are logged out and empty
-    $scope.logOut();
+    $scope.logOut('dashboard');
   }
 }]); // end dashController

@@ -29,6 +29,7 @@ CREATE TABLE groups (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR NOT NULL UNIQUE,
 	action_id INTEGER,
+	status VARCHAR(50) NOT NULL DEFAULT 'Open',
 	created TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp
 );
 -- Join table for members and groups
@@ -76,3 +77,64 @@ CREATE TABLE cheers (
 INSERT INTO cheers (type) VALUES ('High Five');
 INSERT INTO cheers (type) VALUES ('Light A Fire');
 INSERT INTO cheers (type) VALUES ('Thanks');
+
+CREATE VIEW members_join_groups AS
+	SELECT members.first_name,
+    members.last_name,
+    members.pref_name,
+    members.log_email,
+    members.alert_email,
+    members.twitter,
+    members.sms,
+    members.team_id,
+    members.created AS member_created,
+    actions.type AS action_type,
+    groups.title AS group_title,
+    groups.created AS group_created,
+    members.id AS member_id,
+    groups.status AS group_status
+   FROM members
+     LEFT JOIN member_group ON members.id = member_group.member_id
+     LEFT JOIN actions ON member_group.member_action = actions.id
+     LEFT JOIN groups ON member_group.group_id = groups.id;
+
+CREATE VIEW members_join_info AS
+SELECT members.first_name,
+    members.last_name,
+    members.pref_name,
+    members.log_email,
+    members.alert_email,
+    members.twitter,
+    members.sms,
+    members.team_id,
+    members.created AS member_created,
+    steps.id AS step_id,
+    members.id AS member_id,
+    steps.action_id,
+    steps.created AS step_created,
+    actions.type AS action_type,
+    groups.title AS group_title,
+    groups.created AS group_created
+   FROM members
+     LEFT JOIN steps ON members.id = steps.member_id
+     LEFT JOIN member_group ON members.id = member_group.member_id
+     LEFT JOIN actions ON member_group.member_action = actions.id
+     LEFT JOIN groups ON member_group.group_id = groups.id;
+
+CREATE VIEW received_shouts AS
+SELECT r.first_name AS runner_first_name,
+    r.pref_name AS runner_pref_name,
+    r.log_email AS runner_email,
+    r.id AS runner_id,
+    c.type AS cheer_type,
+    f.first_name AS fan_first_name,
+    f.pref_name AS fan_pref_name,
+    f.id AS fan_id,
+    s.delivered AS shout_heard,
+    s.created AS shout_created,
+    s.id AS shout_id,
+    f.log_email AS fan_email
+   FROM members r
+     JOIN shouts s ON r.id = s.runner_id
+     JOIN members f ON f.id = s.fan_id
+     JOIN cheers c ON c.id = s.cheer_id;

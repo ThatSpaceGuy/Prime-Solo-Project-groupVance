@@ -10,7 +10,7 @@ var lock = new Auth0Lock( 'mPWbEGWKhuLu7BazXT3IUpFq3P0KV2uM', 'thatspaceguy.auth
 
 
 /// == JavaScript == ///
-myApp.controller( 'navController', [ '$scope', function( $scope ){
+myApp.controller( 'navController', [ '$scope','$location', function( $scope, $location ){
   console.log( 'NG' );
   $scope.linkList =[
     {route:'home',text:'Home'},
@@ -18,8 +18,10 @@ myApp.controller( 'navController', [ '$scope', function( $scope ){
     {route:'donate',text:'Map'}
 
   ];
+
   // log out url, from Auth0
-  $scope.logOutUrl = 'https://accounts.google.com/logout';
+  // $scope.logOutUrl = 'https://thatspaceguy.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A3000/dashboard';
+  $scope.logOutUrl = 'https://accounts.google.com/logout?&continue=http://localhost:3000/';
 
   $scope.logIn = function(){
     // call out logIn function from auth0.js
@@ -34,14 +36,18 @@ myApp.controller( 'navController', [ '$scope', function( $scope ){
         localStorage.setItem( 'userToken', token );
         // save user profile to localStorage
         localStorage.setItem( 'userProfile', JSON.stringify( profile ) );
+        // relaod Page
+        location.reload();
       } // end no error
     }); //end lock.show
   }; // end scope.logIn
 
 
-  $scope.logOut = function(){
+  $scope.logOut = function(path){
     localStorage.removeItem( 'userProfile' );
     localStorage.removeItem( 'userToken' );
+    $location.path( 'https://accounts.google.com/logout?&continue=http://localhost:3000/'+path );
+    $location.path( '/'+path );
     $scope.loggedIn = false;
     $scope.currentUser = {pref_name: 'Guest'};
     console.log( 'loggedOut:', $scope.userProfile, $scope.currentUser );
@@ -55,12 +61,14 @@ myApp.controller( 'navController', [ '$scope', function( $scope ){
   }
   else{
     // if not, make sure we are logged out and empty
-    $scope.logOut();
+    $scope.logOut($scope.currentView);
   }
 }]); // end navController
 
 // Angular Routing Set-up
 myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
+  console.log('$routeProvider:',$routeProvider);
+
   $routeProvider.
   when('/home', {
     templateUrl: '/views/partials/home.html',

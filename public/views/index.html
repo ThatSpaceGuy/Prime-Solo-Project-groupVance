@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
-	<head>
-		<script src="vendors/angular.min.js"></script>
-		<script src="vendors/angular-route.min.js"></script>
-		<script src="vendors/ui-grid.min.js"></script>
-		<script src="vendors/moment-with-locales.min.js"></script>
-		<script src="vendors/moment-timezone-with-data.min.js"></script>
-    <script src="scripts/client.js"></script>
-		<script src="scripts/controllers/homeController.js"></script>
-		<script src="scripts/controllers/dashController.js"></script>
-		<script src="scripts/controllers/donateController.js"></script>
-		<link rel="stylesheet" href="vendors/bootstrap.min.css">
-		<link rel="stylesheet" href="vendors/ui-grid.min.css">
-    <link rel="stylesheet" href="styles/styles.min.css"/>
-		<title>Total Mercy</title>
-		<base href="/"> <!-- Coupled with html5Mode, this makes pretty URLs -->
-	</head>
-	<body>
-		<h1>The Agents of Total Mercy</h1>
-		<div ng-controller="navController">
-			<p>
-				<span ng-repeat="link in linkList">
-					<a href={{link.route}}>{{link.text}}</a>
-				</span>
-			</p>
-    </div>
+<head>
+	<script src="https://cdn.auth0.com/js/lock-8.1.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script src="vendors/angular.min.js"></script>
+	<script src="vendors/angular-route.min.js"></script>
+	<script src="vendors/ui-grid.min.js"></script>
+	<script src="vendors/moment-with-locales.min.js"></script>
+	<script src="vendors/moment-timezone-with-data.min.js"></script>
+	<script src="scripts/client.js"></script>
+	<script src="scripts/controllers/homeController.js"></script>
+	<script src="scripts/controllers/dashController.js"></script>
+	<script src="scripts/controllers/donateController.js"></script>
+	<link rel="stylesheet" href="vendors/bootstrap.min.css">
+	<link rel="stylesheet" href="vendors/ui-grid.min.css">
+	<link rel="stylesheet" href="styles/styles.min.css"/>
+	<title>Total Mercy</title>
+	<base href="/"> <!-- Coupled with html5Mode, this makes pretty URLs -->
+</head>
+<body>
+	<h1>The Agents of Total Mercy</h1>
+	<div ng-controller="navController">
+		<p>
+			<span ng-repeat="link in linkList">
+				<a href={{link.route}}>{{link.text}}</a>
+			</span>
+			<a ng-click="logIn()" ng-if="loggedIn === false">Log In</a>
+			<a href=logOutUrl ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
+		</p>
 
-    <main ng-view autoscroll="true">
+
+		<main ng-view autoscroll="true">
 			<!-- NG-routing shows up here -->
-    </main>
-	</body>
+		</main>
+	</div>
+</body>
 </html>

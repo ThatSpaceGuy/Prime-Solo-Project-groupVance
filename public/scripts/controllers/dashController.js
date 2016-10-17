@@ -1,9 +1,6 @@
 myApp.controller('dashController', ['$scope', '$http', '$window','uiGridConstants',
 function($scope, $http, $window, uiGridConstants){
   console.log('Dashboard Controller');
-  //// Global variables
-  // for testing
-  $scope.loggedIn = true; // to be replaced by Auth0 logic
 
   // initialize values
   $scope.userSteps = 0;
@@ -42,6 +39,13 @@ function($scope, $http, $window, uiGridConstants){
 
 
   // Function Delcarations
+  $scope.getDemoStatsHeight = function() {
+    var rowHeight = 30;
+    var headerHeight = 30;
+    return {
+      height: ($scope.demoGroup.data.length * rowHeight + headerHeight) + "px"
+    };
+  };
   $scope.getGroupStatsHeight = function() {
     var rowHeight = 30;
     var headerHeight = 30;
@@ -52,11 +56,14 @@ function($scope, $http, $window, uiGridConstants){
 
   $scope.getMember = function(){
     console.log( 'in getMember()' );
-
+    console.log('Profile again:', $scope.userProf);
     // assemble objectToSend
     var logInfoToSend = {
-      memberValue: 'Listettson@gmail.com'
+      memberEmail: $scope.userProfile.email,
+      firstName: $scope.userProfile.given_name,
+      lastName: $scope.userProfile.family_name
     }; //end object to send
+    console.log('logInfoToSend:',logInfoToSend);
     $http({
       method: 'POST',
       url: '/getMemberDB',
@@ -218,14 +225,9 @@ function($scope, $http, $window, uiGridConstants){
     }); // end http POST call
   }; // end getMember
 
-  // if a Member is loggedIn
-  if ($scope.loggedIn){
-    // get their info
-    $scope.getMember();
-  } else {
-    // otherwise, call them 'Guest'
-    $scope.currentUser = {pref_name: 'Guest'};
-  } // end loggedIn check
+
+
+
 
   $scope.thankClick = function(shoutIndex, toName, thisShout, toID){
     var thankInfoToSend ={
@@ -383,4 +385,18 @@ function($scope, $http, $window, uiGridConstants){
       }); // end http DELETE call
     }
   };
+
+  //// LoggedIn check
+  if( JSON.parse( localStorage.getItem( 'userProfile' ) ) ){
+    // if so, save userProfile as $scope.userProfile
+    $scope.userProfile = JSON.parse( localStorage.getItem( 'userProfile' ) );
+    console.log( 'loggedIn:', $scope.userProfile );
+    $scope.loggedIn = true;
+    // if a Member is loggedIn get their info
+    $scope.getMember();
+  }
+  else{
+    // if not, make sure we are logged out and empty
+    $scope.logOut();
+  }
 }]); // end dashController

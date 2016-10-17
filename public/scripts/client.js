@@ -5,23 +5,17 @@ var myApp = angular.module( 'myApp', ['ngRoute', 'ui.grid','ui.grid.autoResize']
 
 var lock = new Auth0Lock( 'mPWbEGWKhuLu7BazXT3IUpFq3P0KV2uM', 'thatspaceguy.auth0.com');
 
-/// == Function Declarations == ///
-
-
-
 /// == JavaScript == ///
 myApp.controller( 'navController', [ '$scope','$location', function( $scope, $location ){
   console.log( 'NG' );
   $scope.linkList =[
     {route:'home',text:'Home'},
-    {route:'dashboard',text:'Dashboard'},
-    {route:'donate',text:'Map'}
-
+    {route:'dashboard',text:'Dashboard'}
   ];
 
   // log out url, from Auth0
   // $scope.logOutUrl = 'https://thatspaceguy.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A3000/dashboard';
-  $scope.logOutUrl = 'https://accounts.google.com/logout?&continue=https://tranquil-hamlet-55100.herokuapp.com/';
+  $scope.logOutUrl = 'https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/logout?continue=https://localhost:3030/';
 
   $scope.logIn = function(){
     // call out logIn function from auth0.js
@@ -46,8 +40,7 @@ myApp.controller( 'navController', [ '$scope','$location', function( $scope, $lo
   $scope.logOut = function(path){
     localStorage.removeItem( 'userProfile' );
     localStorage.removeItem( 'userToken' );
-    $location.path( 'https://accounts.google.com/logout?&continue=http://localhost:3000/'+path );
-    $location.path( '/'+path );
+    $location.path( 'https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:3030/'+path );
     $scope.loggedIn = false;
     $scope.currentUser = {pref_name: 'Guest'};
     console.log( 'loggedOut:', $scope.userProfile, $scope.currentUser );
@@ -77,10 +70,6 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
   when('/dashboard', {
     templateUrl: '/views/partials/dashboard.html',
     controller: 'dashController'
-  }).
-  when('/donate', {
-    templateUrl: '/views/partials/donate.html',
-    controller: 'donateController'
   }).
   otherwise({
     redirectTo: '/home'

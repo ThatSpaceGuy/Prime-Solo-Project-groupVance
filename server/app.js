@@ -18,10 +18,10 @@ if(process.env.DATABASE_URL !== undefined) {
 app.use(bodyParser.urlencoded( {extended: false } ));
 app.use(bodyParser.json());
 
-var portDecision = process.env.PORT || 3000;
+var portDecision = process.env.PORT || 3030;
 // spin up server
 app.listen(portDecision, function(){
-  if (verbose) {console.log('Server is listening on Heroku or port 3000');}
+  if (verbose) {console.log('Server is listening on:',portDecision);}
 });
 
 // setup 'public' as a static resource

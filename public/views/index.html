@@ -27,7 +27,7 @@
 				<a ng-href={{link.route}}>{{link.text}}</a>
 			</span>
 			<a ng-href="/{{currentView}}" ng-click="logIn()" ng-if="loggedIn === false">Log In</a>
-			<a ng-href="{{logOutUrl}}{{currentView}}" ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
+			<a ng-href="{{logOutUrl}}" ng-if="loggedIn === true" ng-click="logOut()">Log Out</a>
 		</p>
 
 

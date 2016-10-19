@@ -1,7 +1,7 @@
-Total Mercy
+groupVance
 ============
 Application Overview
-TotalMercy.com is a full-stack web application to track daily intercession centered on the Hour of Mercy (3:00 o’clock hour).  Members sign up to pray daily and log-in each day to report that they have prayed that day.  The application organizes the intercessors into teams and can give information about numbers of intercessors and times of the day covered by prayer.  The Member dashboard will display their team, where in the world it is currently the Hour of Mercy, and other inspirational items.  Members can sign up to be reminded to pray in a few different ways - initial plans are e-mail, text, and possibly Twitter and Facebook.   TotalMercy.com will use teams to organize and track members and prayer coverage, but this will not be part of the primary understanding of members - so as to not complicate their involvement.
+groupVance is a full-stack web application to track daily progress toward a personal goal.  Members join a group and log-in each day to report that they have prayed that day. The Member dashboard displays their team, and each group members progress toward the goal for the past week.  
 
 
 Versioning Plan
@@ -38,13 +38,13 @@ Outline Plan
     o	Personal Stats Box
       •	If logged out, then introductory message
         •	If logged in, then:
-          •	Prayed today?
-            o	Database READ for prayer that day
+          •	Goal today?
+            o	Database READ for Step that day
             o	If not, then Button for Yes
               •	Click: DB UPDATE
-            o	If yes, then message saying thanks for praying today and Button for undo
+            o	If yes, then message saying thanks and Button for undo
               •	Click: DB DELETE
-          •	You have covered # of days with prayer!
+          •	You have taken # of steps toward your goal!
             o	DB READ
     o	Group Stats Box
       •	If logged out, then introductory message
@@ -70,7 +70,7 @@ Outline Plan
       •	Randomized Quote from array
       •	Randomized image from array
     o	Resources Box
-      •	Links to Prayer Resources and Charities to Support
+      •	Links to Resources 
 
   •	Database
     o	Set up tables and relationships

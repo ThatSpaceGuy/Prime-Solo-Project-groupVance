@@ -4,12 +4,6 @@ Application Overview
 groupVance is a full-stack web application to track daily progress toward a personal goal.  Members join a group and log-in each day to report that they have prayed that day. The Member dashboard displays their team, and each group members progress toward the goal for the past week.  
 
 
-Versioning Plan
----------------
-* 0.1 - ReadMe & html/js/css/server/heroku handshakes - initial commit
-
-* 1.0 - Test and sign off on MVP
-
 Outline Plan
 ------------
 * Version 1.0 - MVP
@@ -70,7 +64,7 @@ Outline Plan
       •	Randomized Quote from array
       •	Randomized image from array
     o	Resources Box
-      •	Links to Resources 
+      •	Links to Resources
 
   •	Database
     o	Set up tables and relationships

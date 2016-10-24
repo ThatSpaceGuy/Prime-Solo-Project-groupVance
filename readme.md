@@ -47,7 +47,7 @@ Outline Plan
         •	Goal Date
           o	If true, then countdown to Goal Date
             •	DB READ
-          o	If false, then countup from Start Date
+          o	If false, then count-up from Start Date
     o	Group Message Box
       •	If logged out, then introductory message
       •	If logged in, then:

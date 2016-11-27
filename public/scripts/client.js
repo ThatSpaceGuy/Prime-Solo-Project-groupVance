@@ -48,6 +48,7 @@ myApp.controller( 'navController', [ '$scope','$location', function( $scope, $lo
   };
 
   $scope.logInCheck = function(){
+    $scope.loggedIn = true;
     if( JSON.parse( localStorage.getItem( 'userProfile' ) ) ){
       // if so, save userProfile as $scope.userProfile
       $scope.userProfile = JSON.parse( localStorage.getItem( 'userProfile' ) );

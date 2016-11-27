@@ -10,3 +10,15 @@ When logged in, users are able to log that they took a step towards their person
 
 Technologies used
 -----------------
+* PostrgeSQL
+* AngularJS
+* Node.js
+* Express.js
+* Moment.js
+* ui-grid
+* Bootstrap
+* Sass
+* HTML
+* CSS
+* JavaScript
+* Heroku
